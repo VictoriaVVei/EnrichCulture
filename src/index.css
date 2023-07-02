@@ -1,0 +1,46 @@
+/* ------- */
+/* Overall */
+/* ------- */
+* {
+  box-sizing: border-box;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  transition: 0.3s;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+
+  /* Ensure footer at bottom */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Ensure footer at bottom */
+main {
+  flex: 1;
+}
+
+/* -------- */
+/* MainPage */
+/* -------- */
+
+/* -Page Setting- */
+/* Each page needs this css*/
+#MainPage {
+  /* Ensure no white space at upper*/
+  margin: 0;
+
+  /* Ensure footer at bottom */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* -Components Setting- */
