@@ -37,7 +37,7 @@
  <img src="wireframe/Sign-up.jpg" alt="Sign-up" width="450">
 
 
-* **Diversity:** This page hosts all public posts, and users have the option to utilize a feature on the left to filter and view posts based on their preferences. Additionally, users can employ the 'Like' feature to add posts to their favorite list.
+* **Diversity:** This page hosts all public posts, and users have the option to utilize a feature on the left to filter and view posts based on their preferences. Additionally, users can employ the 'Like' feature to add posts to their favorite list. If the user did not log in or sign up to their account, they can still see and click on the like button but there will be a window to let them log in or sign up. 
 
  <img src="wireframe/Diversity.jpg" alt="Diversity" width="450">
 
