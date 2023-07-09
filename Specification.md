@@ -1,7 +1,10 @@
 # Phase 2: Design & Specifications
 ###### Team:
 * ExCultHub, EnrichCulture
-* Marina Cui, Siyuan Ji, Junjie Wei, Zonglin Zuo
+* **Marina Cui** (Project Manager)
+* **Siyuan Ji** (Developer)
+* **Junjie Wei** (Developer)
+* **Zonglin Zuo** (Project Designer)
 
 ### Problem Statement
 
