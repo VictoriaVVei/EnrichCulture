@@ -81,9 +81,13 @@ export function Account() {
     }
 
     const next_page = () => {
-        setclick(click + 1)
-        setPage_Num(Page_Num + 1)
+        if (postData.length < 9) {
+            return;
+        }
+
         if (postData_last) {
+            setclick(click + 1)
+            setPage_Num(Page_Num + 1)
             setsep_page(prev => [...prev, postData_last])
         }
     }
@@ -158,7 +162,7 @@ export function Account() {
                         </div>
                     </div> */}
                     <RenderCard postData={postData} />
-                    <div className='changePage'>
+                    <div className='changePage' >
                         <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
                         <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
                         <div className='switchPage' onClick={next_page}>Next Page &gt;</div>

@@ -93,7 +93,7 @@ export function MainPage() {
         let array = []
         nameData[0].Added_Culture.Cultures.map((item) => {
             const score = 1 - (LevenshteinDistance(item.cname.toLowerCase().trim(), value.toLowerCase().trim()) / Math.max(item.cname.length, 1));
-            if (score > 0.4) {
+            if (score > 0.3) {
                 let object = {
                     score: score,
                     word_database: item.cname,
@@ -216,7 +216,7 @@ export function MainPage() {
                     <form>
                         <h2 style={{ marginBottom: "40px" }}>Search the Cultural</h2>
                         <div className='search_area'>
-                            <label htmlFor="search" className='material-symbols-outlined search_button'>search</label>
+                            <label htmlFor="search" className='material-symbols-outlined search_button' onClick={submit} style={{ cursor: "pointer" }}>search</label>
                             <input
                                 type="text"
                                 id="search"

@@ -9,17 +9,16 @@ export function RenderCard(props) {
             let pic = content.Post_Information.pic
             let name = content.Post_Information.cname
             let postID = content.Post_Information.postID
-
             return (
                 <div className='post_each' key={postID}>
-                    <NavLink to={"/post/" + { name }}>
+                    <NavLink to={`/postDetail/${postID}`} >
                         <img
                             src={pic}
                             alt='post.img'
                         />
                         <p>{name}</p>
                     </NavLink>
-                </div>
+                </div >
             )
         })
     }
