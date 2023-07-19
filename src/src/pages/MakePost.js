@@ -446,7 +446,7 @@ export function MakePost() {
                     />
                     {/* <hr /> */}
 
-                    <div className='decorate_signin' onClick={submit}>Submit</div>
+                    <div className='decorate_signin' onClick={submit} style={{ marginBottom: "40px" }}>Submit</div>
                 </form>
                 <div id="snackbar"></div>
             </div>
