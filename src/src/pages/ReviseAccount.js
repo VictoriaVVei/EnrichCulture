@@ -99,7 +99,6 @@ export function ReviseAccount() {
             setbio(value)
         }
         if (id === "location") {
-            console.log(value)
             setlocation(value)
         }
     }
@@ -152,6 +151,7 @@ export function ReviseAccount() {
                                     tips.className = tips.className.replace("show", "disappear");
                                 }, 2000);
                                 window.location.href = "/account"
+                                topFunction()
                             })
                     })
                 })
@@ -174,9 +174,32 @@ export function ReviseAccount() {
         }
     }
 
+    const topFunction = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    };
+
+    const goBack = () => {
+        window.history.back()
+        topFunction()
+    }
+
+    // Delete the location same with the first one
+    useEffect(() => {
+        const selectElement = document.querySelector('#location');
+        const options = Array.from(selectElement.options);
+
+        options.forEach(option => {
+            if (option.value === location) {
+                selectElement.removeChild(option);
+            }
+        });
+    }, [])
+
     return (
         <div id="ReviseAccount">
             <Nav />
+            <div className='back' onClick={goBack}>&lt; back</div>
             <div className='reviseAccount'>
                 <form>
                     <div className="photo">
@@ -234,6 +257,7 @@ export function ReviseAccount() {
                     <div className='setting'>
                         <label htmlFor="location">Location: </label>
                         <select id="location" onChange={(e) => handleInputChange(e)} >
+                            <option value={location} title='Your last location'>{location}</option>
                             <option value="China">China</option>
                             <option value="England">England</option>
                             <option value="Japan">Japan</option>

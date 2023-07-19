@@ -8,6 +8,11 @@ import { NavLink } from 'react-router-dom';
 export function Account() {
     let loginUser = localStorage.getItem("loginUser")
 
+    const topFunction = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    };
+
     const [userData, setuserData] = useState([])
     useEffect(() => {
         getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", loginUser)))
@@ -31,6 +36,7 @@ export function Account() {
             setname(userData[0].Personal_Information.fname + " " + userData[0].Personal_Information.lname)
             setbio(userData[0].Personal_Information.bio.length > 0 ? userData[0].Personal_Information.bio : "")
             setlocation(userData[0].Personal_Information.location.length > 0 ? userData[0].Personal_Information.location : "")
+            localStorage.setItem("location", userData[0].Personal_Information.location.length > 0 ? userData[0].Personal_Information.location : "")
             setpost_num(userData[0].PostNum)
             setfollowers_num(userData[0].Followers.length)
             following(userData[0].Following.length)
@@ -123,8 +129,8 @@ export function Account() {
                         <h3>{name}</h3>
                         <p>{bio}</p>
                         <p>{location}</p>
-                        <div className='edit'><NavLink to="/reviseAccount">Edit Your Profile</NavLink></div>
-                        <div className='make'><NavLink to="/makePost">Make a post</NavLink></div>
+                        <div className='edit'><NavLink to="/reviseAccount" onClick={topFunction}>Edit Your Profile</NavLink></div>
+                        <div className='make'><NavLink to="/makePost" onClick={topFunction}>Make a post</NavLink></div>
                     </div>
 
                     <div className='info_website'>

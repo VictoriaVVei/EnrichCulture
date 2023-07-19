@@ -14,7 +14,21 @@ export function Nav() {
             })
             currentPage[0].classList.add("dashed_decoration");
         }
-        if (currentLocation === "signup" || currentLocation === "signin" || currentLocation === "account") {
+        if (currentLocation === "diversity") {
+            currentPage.forEach((content) => {
+                content.classList.remove("dashed_decoration");
+            })
+            currentPage[1].classList.add("dashed_decoration");
+        }
+        if (currentLocation === "festival") {
+            currentPage.forEach((content) => {
+                content.classList.remove("dashed_decoration");
+            })
+            currentPage[2].classList.add("dashed_decoration");
+        }
+        if (currentLocation === "signup" || currentLocation === "signin" ||
+            currentLocation === "account" || currentLocation === "reviseAccount" ||
+            currentLocation === "makePost") {
             currentPage.forEach((content) => {
                 content.classList.remove("dashed_decoration");
             })

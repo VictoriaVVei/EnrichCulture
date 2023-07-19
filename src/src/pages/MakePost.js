@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react'; //import React Component
+import React, { useEffect, useRef, useState } from 'react'; //import React Component
 import { Nav } from '../components/Nav';
 import { storage, cloudStore } from '../../firebase';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, collection, query, where, getDocs, updateDoc, increment } from 'firebase/firestore';
+import { doc, setDoc, collection, query, where, getDocs, updateDoc, increment, arrayUnion } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export function MakePost() {
@@ -21,6 +20,16 @@ export function MakePost() {
         contentType: "image/png"
     };
 
+    const [typeData, settypeData] = useState([])
+    useEffect(() => {
+        getDocs(query(collection(cloudStore, "typeData"), where("typeData", "!=", null)))
+            .then((querySnapshot) => {
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                settypeData(data)
+            })
+    }, []);
+
+    const [similarity, setsimilarity] = useState([])
     const handleInputChange = (e) => {
         let { id, value } = e.target
         const image = imageRef.current;
@@ -91,17 +100,64 @@ export function MakePost() {
             setlocation(value)
         }
         if (id === "type") {
-            value = value.toLowerCase();
-            value = value.charAt(0).toUpperCase() + value.slice(1);
-            settype(value)
+            settype(value.trim())
             settype2("")
         }
         if (id === "intro") {
             setintro(value)
         }
         if (id === "otherCate") {
+            // value = value.toLowerCase();
+            // value = value.charAt(0).toUpperCase() + value.slice(1);
             settype2(value)
+            settype("")
+
+            let array = []
+            typeData[0].typeData.map((item) => {
+                const score = 1 - (LevenshteinDistance(item.toLowerCase().trim(), value.toLowerCase().trim()) / Math.max(item.length, 1));
+                if (score > 0.25) {
+                    let object = {
+                        score: score,
+                        word_database: item,
+                        word_enter: value,
+                    }
+                    if (object.score > 0) {
+                        array.push(object)
+                    }
+                }
+                return null; // add return statement
+            });
+            setsimilarity(array)
         }
+    }
+
+    // For auto complete
+    const [autoCompleteDivs, setAutoCompleteDivs] = useState([]);
+    useEffect(() => {
+        if (type2.length > 0) {
+            const addDiv = document.querySelector('.addDivs');
+            if (similarity.length > 0) {
+                addDiv.style.display = "block";
+                const autoComplete = similarity.slice(0, 5).map((content) => {
+                    let typeName = content.word_database;
+                    return (
+                        <li className='addDiv' key={typeName} data-value={typeName} onClick={(e) => fillIn(e)}>
+                            {typeName}
+                        </li>
+                    );
+                });
+                setAutoCompleteDivs(autoComplete);
+            } else {
+                addDiv.style.display = "none";
+                setAutoCompleteDivs([]);
+            }
+        }
+
+    }, [type2, similarity]);
+
+    const fillIn = (e) => {
+        let value = e.target.dataset.value
+        settype2(value)
     }
 
     const check_year = () => {
@@ -128,8 +184,22 @@ export function MakePost() {
 
         if (image.value.length !== 0 && cname.trim().length > 0 && year.trim().length > 0 && month.trim().length > 0
             && day.trim().length > 0 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0) {
-            if (year !== "Every Year" && !isValidDate(parseInt(year), parseInt(month), parseInt(day))) {
+            if (cname.match("%20") || cname.match(":&:")) {
+                text = document.createTextNode("String ':&:' and '%20' are not allowed");
+                tips.appendChild(text)
+                tips.className = "show";
+                setTimeout(() => {
+                    tips.className = tips.className.replace("show", "disappear");
+                }, 2000);
+            } else if (year !== "Every Year" && !isValidDate(parseInt(year), parseInt(month), parseInt(day))) {
                 text = document.createTextNode("Invaild day");
+                tips.appendChild(text)
+                tips.className = "show";
+                setTimeout(() => {
+                    tips.className = tips.className.replace("show", "disappear");
+                }, 2000);
+            } else if (check_type.includes(",") || check_type.includes("，")) {
+                text = document.createTextNode("One type only");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {
@@ -140,6 +210,10 @@ export function MakePost() {
                 let postID = getRandomInt(1000, 9999) + ":&:" + cname + ":&:" + loginUser;
                 const storageRef = ref(storage, "Post Image/" + postID);
 
+                text = document.createTextNode("Wait for Processing. Do not Reflesh the page!");
+                tips.appendChild(text)
+                tips.className = "show";
+
                 uploadBytesResumable(storageRef, image.files[0], metadata).then(() => { //Store img
                     getDownloadURL(storageRef).then(async (downloadURL) => {
                         const docData = {
@@ -149,7 +223,7 @@ export function MakePost() {
                                 month: month,
                                 day: day,
                                 location: location,
-                                type: check_type,
+                                type: check_type.trim(),
                                 intro: intro,
                                 postID: postID,
                                 date: new Date(),
@@ -158,7 +232,7 @@ export function MakePost() {
                             }
                         }
 
-                        const typeData = await getDocs(query(collection(cloudStore, "typeData"), where("typeData", "!=", null))); //Check email exsit
+                        const typeData = await getDocs(query(collection(cloudStore, "typeData"), where("typeData", "!=", null)));
                         const typeData_array = typeData.docs.map(doc => doc.data()); //Change promise to array
                         if (typeData_array.length === 0) {
                             const docData_type = {
@@ -166,13 +240,38 @@ export function MakePost() {
                             }
                             setDoc(doc(cloudStore, "typeData", "typeData"), docData_type)
                         } else {
-                            if (typeData_array[0].typeData.filter((item) => item.toLowerCase() == check_type.toLowerCase()).length === 0) {
-                                typeData_array[0].typeData.push(check_type)
+                            if (typeData_array[0].typeData.filter((item) => item.toLowerCase().trim() == check_type.toLowerCase().trim()).length === 0) {
+                                typeData_array[0].typeData.push(check_type.trim())
                                 const docData_type = {
                                     "typeData": typeData_array[0].typeData
                                 }
                                 updateDoc(doc(cloudStore, "typeData", "typeData"), docData_type)
                             }
+                        }
+
+                        const nameData = await getDocs(query(collection(cloudStore, "nameData"), where("Added_Culture.Cultures", "!=", null)));
+                        const nameData_array = nameData.docs.map(doc => doc.data()); //Change promise to array
+                        if (nameData_array.length === 0) {
+                            const docData_name = {
+                                "Added_Culture": {
+                                    "Cultures": [
+                                        {
+                                            cname: cname,
+                                            postID: postID
+                                        }
+                                    ]
+                                }
+                            }
+                            setDoc(doc(cloudStore, "nameData", "nameData"), docData_name)
+                        } else {
+                            const newCulture = {
+                                cname: cname,
+                                postID: postID
+                            };
+                            const docData_name = {
+                                "Added_Culture.Cultures": arrayUnion(newCulture)
+                            }
+                            updateDoc(doc(cloudStore, "nameData", "nameData"), docData_name)
                         }
 
                         const docData_postNum = {
@@ -181,24 +280,21 @@ export function MakePost() {
                         updateDoc(doc(cloudStore, "userData", loginUser), docData_postNum)
 
                         setDoc(doc(cloudStore, "postData", postID), docData).then(() => {
+                            tips.className = tips.className.replace("show", "disappear");
+                            tips.innerHTML = '';
                             text = document.createTextNode("Finished Processing");
                             tips.appendChild(text)
-                            tips.className = "show";
+                            setTimeout(() => {
+                                tips.className = "show";
+                            }, 100);
                             setTimeout(() => {
                                 tips.className = tips.className.replace("show", "disappear");
                             }, 2000);
                             window.location.href = "/account"
+                            topFunction()
                         })
                     })
                 });
-
-
-                text = document.createTextNode("Wait for Processing. Do not Reflesh the page!");
-                tips.appendChild(text)
-                tips.className = "show";
-                setTimeout(() => {
-                    tips.className = tips.className.replace("show", "disappear");
-                }, 2000);
             }
         } else {
             text = document.createTextNode("You should fill out all the empty blanks");
@@ -210,9 +306,20 @@ export function MakePost() {
         }
     }
 
+    const topFunction = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    };
+
+    const goBack = () => {
+        window.history.back()
+        topFunction()
+    }
+
     return (
         <div id="MakePost">
             <Nav />
+            <div className='back' onClick={goBack}>&lt; back</div>
             <div className='makePost'>
                 <form>
                     <div className="photo">
@@ -228,9 +335,11 @@ export function MakePost() {
                                 onChange={(e) => { handleInputChange(e) }}
                             />
                         </div>
+                    </div>
+                    <div className='showPic_content'>
                         <div className='showPic'></div>
                     </div>
-                    <label htmlFor="cname">Name: </label>
+                    <label htmlFor="cname">Culture Name: </label>
                     <input
                         type="text"
                         id="cname"
@@ -238,6 +347,7 @@ export function MakePost() {
                         // placeholder="Write your Last Name"
                         onChange={(e) => handleInputChange(e)}
                         value={cname}
+                        style={{ width: "80%" }}
                     />
                     <hr
                         style={{ marginBottom: "30px" }}
@@ -318,6 +428,10 @@ export function MakePost() {
                                 />
                             </div>
                             <hr />
+                            <ol className='addDivs'>
+                                <p style={{ fontSize: "20px", fontWeight: "bolder" }}>What we have: (Click to choose)</p>
+                                {autoCompleteDivs}
+                            </ol>
                         </> : null
                     }
                     <br />
@@ -330,7 +444,7 @@ export function MakePost() {
                         onChange={(e) => handleInputChange(e)}
                         value={intro}
                     />
-                    <hr />
+                    {/* <hr /> */}
 
                     <div className='decorate_signin' onClick={submit}>Submit</div>
                 </form>
@@ -347,8 +461,8 @@ function getRandomInt(min, max) {
 }
 
 function isValidDate(year, month, day) {
-    var d = new Date(year, month - 1, day);
-    if ((d.getFullYear() === year || year === "EY") && d.getMonth() + 1 === month && d.getDate() === day) {
+    var date = new Date(year, month - 1, day);
+    if ((date.getFullYear() === year || year === "Every Year") && date.getMonth() + 1 === month && date.getDate() === day) {
         return true;
     } else {
         return false;
