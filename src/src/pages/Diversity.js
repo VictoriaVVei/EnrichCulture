@@ -49,7 +49,7 @@ export function Diversity() {
     useEffect(() => {
         if (whatSearch.length > 0) {
             if (Page_Num === 0) {
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "==", whatSearch), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.format", "==", whatSearch.toLowerCase().trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
                         setpostData(data)
@@ -59,7 +59,7 @@ export function Diversity() {
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
-                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "==", whatSearch), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
+                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.format", "==", whatSearch.toLowerCase().trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
                             setpostData(data)

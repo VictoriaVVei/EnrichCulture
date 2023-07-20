@@ -159,7 +159,7 @@ main {
 .search {
   background-color: #a9b5b9;
   border-radius: 7px;
-  padding: 40px;
+  padding: 40px 40px 20px 40px;
   width: 80%;
   max-width: 800px;
   margin: auto;
@@ -196,6 +196,7 @@ main {
   border-radius: 7px;
   cursor: pointer;
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 #snackbar.show2 {
@@ -433,6 +434,7 @@ main {
   color: #fff;
   font-size: larger;
   font-weight: bolder;
+  border-radius: 7px;
 
   background-color: rgb(128, 128, 128, 0.8);
   backdrop-filter: blur(1px);

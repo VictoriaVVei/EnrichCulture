@@ -13,6 +13,7 @@ export function MakePost() {
     const [location, setlocation] = useState("China")
     const [type, settype] = useState("Festival")
     const [type2, settype2] = useState("")
+    const [format, setformat] = useState("")
     const [intro, setintro] = useState("")
     const imageRef = useRef("")
     const other = useRef("")
@@ -107,26 +108,29 @@ export function MakePost() {
             setintro(value)
         }
         if (id === "otherCate") {
-            // value = value.toLowerCase();
-            // value = value.charAt(0).toUpperCase() + value.slice(1);
+            let value2 = value.toLowerCase();
+            setformat(value2)
             settype2(value)
             settype("")
 
             let array = []
-            typeData[0].typeData.map((item) => {
-                const score = 1 - (LevenshteinDistance(item.toLowerCase().trim(), value.toLowerCase().trim()) / Math.max(item.length, 1));
-                if (score > 0.25) {
-                    let object = {
-                        score: score,
-                        word_database: item,
-                        word_enter: value,
+            if (typeData[0]) {
+                typeData[0].typeData.map((item) => {
+                    const score = 1 - (LevenshteinDistance(item.toLowerCase().trim(), value.toLowerCase().trim()) / Math.max(item.length, 1));
+                    if (score > 0.25) {
+                        let object = {
+                            score: score,
+                            word_database: item,
+                            word_enter: value,
+                        }
+                        if (object.score > 0) {
+                            array.push(object)
+                        }
                     }
-                    if (object.score > 0) {
-                        array.push(object)
-                    }
-                }
-                return null; // add return statement
-            });
+                    return null; // add return statement
+                });
+            }
+
             setsimilarity(array)
         }
     }
@@ -184,8 +188,8 @@ export function MakePost() {
 
         if (image.value.length !== 0 && cname.trim().length > 0 && year.trim().length > 0 && month.trim().length > 0
             && day.trim().length > 0 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0) {
-            if (cname.match("%20") || cname.match(":&:")) {
-                text = document.createTextNode("String ':&:' and '%20' are not allowed");
+            if (cname.match("%20") || cname.match("&")) {
+                text = document.createTextNode("String '&' and '%20' are not allowed");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {
@@ -207,7 +211,7 @@ export function MakePost() {
                 }, 2000);
             } else {
                 let loginUser = localStorage.getItem("loginUser")
-                let postID = getRandomInt(1000, 9999) + ":&:" + cname + ":&:" + loginUser;
+                let postID = getRandomInt(1000, 9999) + "&" + cname + "&" + loginUser;
                 const storageRef = ref(storage, "Post Image/" + postID);
 
                 text = document.createTextNode("Wait for Processing. Do not Reflesh the page!");
@@ -234,7 +238,8 @@ export function MakePost() {
                                 date: new Date(),
                                 pic: downloadURL,
                                 author: loginUser,
-                                isFestival: checkFestival
+                                isFestival: checkFestival,
+                                format:format
                             }
                         }
 
@@ -287,7 +292,7 @@ export function MakePost() {
 
                         setDoc(doc(cloudStore, "postData", postID), docData).then(() => {
                             tips.className = tips.className.replace("show", "disappear");
-                            tips.style.backgroundColor ="#54b37b"
+                            tips.style.backgroundColor = "#54b37b"
                             tips.innerHTML = '';
                             text = document.createTextNode("Finished Processing");
                             tips.appendChild(text)
