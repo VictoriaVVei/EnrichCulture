@@ -214,6 +214,11 @@ export function MakePost() {
                 tips.appendChild(text)
                 tips.className = "show";
 
+                let checkFestival = false
+                if (check_type == "Festival") {
+                    checkFestival = true
+                }
+
                 uploadBytesResumable(storageRef, image.files[0], metadata).then(() => { //Store img
                     getDownloadURL(storageRef).then(async (downloadURL) => {
                         const docData = {
@@ -228,7 +233,8 @@ export function MakePost() {
                                 postID: postID,
                                 date: new Date(),
                                 pic: downloadURL,
-                                author: loginUser
+                                author: loginUser,
+                                isFestival: checkFestival
                             }
                         }
 

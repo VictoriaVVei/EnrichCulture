@@ -26,7 +26,11 @@ export function MainPage() {
                 }
             })
 
-            dom = type.map((content) => {
+            let type_filter = type.filter((item) => {
+                return item !== "Festival"
+            })
+
+            dom = type_filter.map((content) => {
                 return (
                     <li className='eachType' key={content} data-value={content} onClick={(e) => searchType(e)}>
                         {content}
@@ -233,7 +237,10 @@ export function MainPage() {
                         <div className='search_type' style={{ marginTop: "40px" }}>
                             <p>Popular types: </p>
                             <ul className='typeList'>
-                                <li onClick={(e) => searchType(e)}>Festival</li>
+                                <li onClick={(e) => searchType(e)} data-value="Architecture">Architecture </li>
+                                <li onClick={(e) => searchType(e)} data-value="Art">Art </li>
+                                <li onClick={(e) => searchType(e)} data-value="Literature">Literature </li>
+                                <li onClick={(e) => searchType(e)} data-value="Music">Music</li>
                             </ul>
                         </div>
                     </form>

@@ -75,13 +75,9 @@ export function PostDetail() {
         settimeInterval(timeZones[location].zone.split("/")[1])
 
         switch (location) {
-            case 'US':
+            case 'US' || 'England':
                 setmonth(userDate.format('MM'));
                 setday(userDate.format('DD'));
-                break;
-            case 'England':
-                setday(userDate.format('DD'));
-                setmonth(userDate.format('MM'));
                 break;
             default:
                 setmonth(userDate.format('MM'));
@@ -94,11 +90,21 @@ export function PostDetail() {
         }
     }
 
+
     useEffect(() => {
         if (year && month && day) {
             convertDate(location_test);
         }
     }, [location_test, day, month, year]);
+
+    const formatDate = () => {
+        switch (location) {
+            case 'US' || 'England':
+                return `${month} / ${day} / ${year}`;
+            default:
+                return `${year} / ${month} / ${day}`;
+        }
+    }
 
     return (
         <div id="PostDetail">
@@ -113,9 +119,9 @@ export function PostDetail() {
                         />
                     </div>
                     <div className='postDetail_content'>
-                        <p>{`${month}-${day}-${year}`} <br />(in {timeInterval} time zone)</p>
-                        <p>#{location}, {cname}</p>
-                        <p style={{ marginBottom: "80px" }}>{intro}</p>
+                        <p>{formatDate()} <br />(in {timeInterval} time zone)</p>
+                        <p><span title='Site'>#{location}</span>, <span title='Name'>{cname}</span> <span title='Type'>({type})</span></p>
+                        <p style={{ marginBottom: "80px" }} title='Introduction'>{intro}</p>
                         <div data-value={author} onClick={(e) => seeAuthor(e)} className="seeAuthor">View Owner</div>
                     </div>
                 </div>

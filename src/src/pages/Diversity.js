@@ -47,29 +47,57 @@ export function Diversity() {
     }
 
     useEffect(() => {
-        if (Page_Num === 0) {
-            getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", whatSearch.length > 0 ? "==" : "!=", whatSearch.length > 0 ? whatSearch : null), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
-                .then((querySnapshot) => {
-                    const data = querySnapshot.docs.map((doc) => doc.data())
-                    setpostData(data)
-
-                    const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-                    setpostData_last(lastVisible)
-                })
-        } else {
-            if (sep_page[Page_Num - 1]) {
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", whatSearch.length > 0 ? "==" : "!=", whatSearch.length > 0 ? whatSearch : null), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
+        if (whatSearch.length > 0) {
+            if (Page_Num === 0) {
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "==", whatSearch), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
                         setpostData(data)
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-                        if (lastVisible) {
-                            setpostData_last(lastVisible)
-                        } else {
-                            setPage_Num(Page_Num - 1)
-                        }
+                        setpostData_last(lastVisible)
                     })
+            } else {
+                if (sep_page[Page_Num - 1]) {
+                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "==", whatSearch), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
+                        .then((querySnapshot) => {
+                            const data = querySnapshot.docs.map((doc) => doc.data())
+                            setpostData(data)
+
+                            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+                            if (lastVisible) {
+                                setpostData_last(lastVisible)
+                            } else {
+                                setPage_Num(Page_Num - 1)
+                            }
+                        })
+                }
+            }
+        } else {
+            if (Page_Num === 0) {
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "!=", null), where("Post_Information.isFestival", "==", false), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
+                    .then((querySnapshot) => {
+                        const data = querySnapshot.docs.map((doc) => doc.data())
+                        setpostData(data)
+
+                        const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+                        setpostData_last(lastVisible)
+                    })
+            } else {
+                if (sep_page[Page_Num - 1]) {
+                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "!=", null), where("Post_Information.isFestival", "==", false), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
+                        .then((querySnapshot) => {
+                            const data = querySnapshot.docs.map((doc) => doc.data())
+                            setpostData(data)
+
+                            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+                            if (lastVisible) {
+                                setpostData_last(lastVisible)
+                            } else {
+                                setPage_Num(Page_Num - 1)
+                            }
+                        })
+                }
             }
         }
     }, [whatSearch, click])
