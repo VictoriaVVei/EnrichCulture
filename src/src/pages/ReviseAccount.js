@@ -12,6 +12,9 @@ export function ReviseAccount() {
     const [lname, setlname] = useState("")
     const [bio, setbio] = useState("")
     const [location, setlocation] = useState("")
+    const [ifPrivate, setifPrivate] = useState("")
+    const [location2, setlocation2] = useState("")
+    const [ifPrivate2, setifPrivate2] = useState("")
     const imageRef = useRef("")
     const metadata = {
         contentType: "image/png"
@@ -21,7 +24,7 @@ export function ReviseAccount() {
     useEffect(() => {
         const image = document.querySelector(".uploadImg");
         if (fname.length === 0 && lname.length === 0 &&
-            bio.length === 0 && location.length === 0 && image.value.length === 0) {
+            bio.length === 0 && location.length === 0 && image.value.length === 0 && ifPrivate.length === 0) {
             if (data.length === 0) {
                 getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", loginUser)))
                     .then((querySnapshot) => {
@@ -30,14 +33,22 @@ export function ReviseAccount() {
                     })
             }
             if (data.length > 0) {
-                setpic(data[0].Personal_Information.img.length > 0 ? data[0].Personal_Information.img : "./img/test.png")
+                setpic(data[0].Personal_Information.img.length > 0 ? data[0].Personal_Information.img : "https://firebasestorage.googleapis.com/v0/b/enrichculture-4cc43.appspot.com/o/Default%2Ftest.png?alt=media&token=5ef4adc4-ab00-4715-b5ff-8aaa0b4dbdef")
                 setfname(data[0].Personal_Information.fname)
                 setlname(data[0].Personal_Information.lname)
                 setbio(data[0].Personal_Information.bio)
                 setlocation(data[0].Personal_Information.location)
+                setifPrivate(data[0].Personal_Information.ifPrivate)
             }
         }
     })
+
+    useEffect(() => {
+        if (location && ifPrivate !== null) {
+            setlocation2(location)
+            setifPrivate2(ifPrivate)
+        }
+    }, [location.length > 0])
 
     const handleInputChange = (e) => {
         let { id, value } = e.target
@@ -101,9 +112,12 @@ export function ReviseAccount() {
         if (id === "location") {
             setlocation(value)
         }
+        if (id === "privacy") {
+            setifPrivate(value)
+        }
     }
 
-    const submit = async () => {
+    const submit = async (e) => {
         const image = document.querySelector(".uploadImg");
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
@@ -118,6 +132,7 @@ export function ReviseAccount() {
                     'Personal_Information.lname': lname,
                     'Personal_Information.bio': bio,
                     'Personal_Information.location': location,
+                    'Personal_Information.ifPrivate': ifPrivate,
                 }
 
                 updateDoc(doc(cloudStore, "userData", loginUser), docData)
@@ -131,6 +146,7 @@ export function ReviseAccount() {
                         window.location.href = "/account"
                     })
             } else {
+                e.target.style.display = "none"
                 const storageRef = ref(storage, "User Image/" + loginUser);
                 uploadBytesResumable(storageRef, image.files[0], metadata).then(() => { //Store img
                     getDownloadURL(storageRef).then(async (downloadURL) => {
@@ -140,6 +156,7 @@ export function ReviseAccount() {
                             'Personal_Information.lname': lname,
                             'Personal_Information.bio': bio,
                             'Personal_Information.location': location,
+                            'Personal_Information.ifPrivate': ifPrivate,
                         }
 
                         updateDoc(doc(cloudStore, "userData", loginUser), docData)
@@ -190,15 +207,27 @@ export function ReviseAccount() {
         const selectElement = document.querySelector('#location');
         const options = Array.from(selectElement.options);
 
-        if (location.length !== 0) {
-            options.forEach(option => {
-                if (option.value === location) {
+        if (location2.length !== 0) {
+            options.slice(1).forEach(option => {
+                if (option.value === location2) {
                     selectElement.removeChild(option);
                 }
             });
         }
+    }, [location2])
 
-    }, [])
+    // Delete the privacy same with the first one
+    useEffect(() => {
+        const selectElement = document.querySelector('#privacy');
+        const options = Array.from(selectElement.options);
+        if (ifPrivate2.length !== 0) {
+            options.slice(1).forEach(option => {
+                if (option.value === String(ifPrivate2)) {
+                    selectElement.removeChild(option);
+                }
+            });
+        }
+    }, [ifPrivate2])
 
     return (
         <div id="ReviseAccount">
@@ -261,7 +290,7 @@ export function ReviseAccount() {
                     <div className='setting'>
                         <label htmlFor="location">Location: </label>
                         <select id="location" onChange={(e) => handleInputChange(e)} >
-                            <option value={location} title='Your last location'>{location}</option>
+                            <option value={location2}>{location2}</option>
                             <option value="China">China</option>
                             <option value="England">England</option>
                             <option value="Japan">Japan</option>
@@ -270,9 +299,10 @@ export function ReviseAccount() {
                         </select>
 
                         <label htmlFor="privacy">Privacy: </label>
-                        <select id="privacy" >
-                            <option value="Public">Public</option>
-                            <option value="Private">Private</option>
+                        <select id="privacy" onChange={(e) => handleInputChange(e)}>
+                            <option value={ifPrivate2}>{ifPrivate2 === true ? "Private" : "Public"}</option>
+                            <option value={false}>Public</option>
+                            <option value={true}>Private</option>
                         </select>
 
                         <label htmlFor="notification">Notification: </label>
@@ -282,7 +312,7 @@ export function ReviseAccount() {
                         </select>
                     </div>
 
-                    <div className='decorate_signin' onClick={submit} style={{ marginBottom: "40px" }}>Submit</div>
+                    <div className='decorate_signin' onClick={(e) => submit(e)} style={{ marginBottom: "40px" }}>Submit</div>
                 </form>
                 <div id="snackbar"></div>
             </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; //import React Component
 import { Nav } from '../components/Nav';
 import { useParams, useNavigate } from 'react-router-dom';
-import moment from 'moment-timezone';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { cloudStore } from '../../firebase';
 
@@ -40,14 +39,6 @@ export function PostDetail() {
     const [author, setauthor] = useState("")
     const [intro, setintro] = useState("")
     const [type, settype] = useState("")
-    const [timeInterval, settimeInterval] = useState("")
-    const timeZones = {
-        'China': { zone: 'Asia/Shanghai' },
-        'England': { zone: 'Europe/London' },
-        'Japan': { zone: 'Asia/Tokyo' },
-        'Korea': { zone: 'Asia/Seoul' },
-        'US': { zone: 'America/New_York' }
-    };
 
     useEffect(() => {
         if (postData.length > 0) {
@@ -70,36 +61,8 @@ export function PostDetail() {
         navigate(newUrl);
     }
 
-    const convertDate = (location_test) => {
-        let timeZone = timeZones[location_test].zone
-        let userDate = moment(`${year}-${month}-${day}`).tz(timeZone);
-        settimeInterval(timeZones[location_test].zone.split("/")[1])
-
-        switch (location_test) {
-            case 'US' || 'England':
-                setmonth(userDate.format('MM'));
-                setday(userDate.format('DD'));
-                break;
-            default:
-                setmonth(userDate.format('MM'));
-                setday(userDate.format('DD'));
-                break;
-        }
-
-        if (year !== "Every Year") {
-            setyear(userDate.format('YYYY'));
-        }
-    }
-
-
-    useEffect(() => {
-        if (year && month && day) {
-            convertDate(location_test);
-        }
-    }, [location_test, day, month, year]);
-
     const formatDate = () => {
-        switch (location) {
+        switch (location_test) {
             case 'US' || 'England':
                 return `${month} / ${day} / ${year}`;
             default:
@@ -111,6 +74,7 @@ export function PostDetail() {
         <div id="PostDetail">
             <Nav />
             <div className='back' onClick={goBack}>&lt; back</div>
+            <div className='forBg1'></div>
             <div className='postDetail'>
                 <div className='postDetail_container'>
                     <div className='postDetail_img'>
@@ -119,14 +83,33 @@ export function PostDetail() {
                             src={img}
                         />
                     </div>
-                    <div className='postDetail_content'>
-                        <p>{formatDate()} <br />(in {timeInterval} time zone)</p>
-                        <p><span title='Site'>#{location}</span>, <span title='Name'>{cname}</span> <span title='Type'>({type})</span></p>
-                        <p style={{ marginBottom: "80px" }} title='Introduction'>{intro}</p>
-                        <div data-value={author} onClick={(e) => seeAuthor(e)} className="seeAuthor">View Author</div>
+                    <div className='postDetail_grid'>
+                        <div className='postDetail_title'><span title='Name'>{cname}</span> <span title='Type'>({type})</span></div>
+
+                        <div className='postDetail_basicInfo'>
+                            <p>Date: <br />{formatDate()}</p>
+                            <p>Time Zone: <br />({location_test} time zone)</p>
+                            <p>Culture Location: <br /><span title='Site'>{location}</span></p>
+                        </div>
+
+                        <div className='postDetail_intro'>
+                            <h1 style={{fontSize:"30px"}}>Introduction</h1>
+                            <p title='Introduction'>{intro}</p>
+                        </div>
+                    </div>
+
+                    <div data-value={author} onClick={(e) => seeAuthor(e)} className="seeAuthor">
+                        <div className='word'>View Author</div>
+                        <div className='circle_container'>
+                            <div className='circle' ></div>
+                            <div className='circle' ></div>
+                            <div className='circle' ></div>
+                            <div className='circle' ></div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div className='forBg2'></div>
         </div>
     );
 }

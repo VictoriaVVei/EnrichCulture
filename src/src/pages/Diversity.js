@@ -47,7 +47,7 @@ export function Diversity() {
     }
 
     useEffect(() => {
-        if (whatSearch.length > 0) {
+        if (whatSearch && whatSearch.length > 0) {
             if (Page_Num === 0) {
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.format", "==", whatSearch.toLowerCase().trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
                     .then((querySnapshot) => {
@@ -106,8 +106,9 @@ export function Diversity() {
         <div id="Diversity">
             <Nav />
             <div className='diversity'>
+                <div className='welcomeBoard'></div>
                 <div className='whatSearch_type'>
-                    <p onClick={close} title="Search in Main Page">What is being seach: <span title="Click to delete">{whatSearch}</span></p>
+                    <p onClick={close} title="Search in Main Page">What type is being seach: <span title="Click to delete">{whatSearch}</span></p>
                 </div>
                 <RenderCard postData={postData} />
                 <div className='changePage atBottom' >

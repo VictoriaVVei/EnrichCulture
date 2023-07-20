@@ -42,8 +42,8 @@ export function MainPage() {
             dom = (() => {
                 return (
                     <li className=''>
-                        There is no culture record from your country.
-                        Revise country in your account or just make a new post.
+                        There is no culture record from your choosen country.
+                        Please Log in, Revise country or just make a new post.
                     </li>
                 );
             });
@@ -171,7 +171,7 @@ export function MainPage() {
         let text = "";
 
         let id = nameData[0].Added_Culture.Cultures.filter((item) => {
-            return item.cname.toLowerCase().trim() === search.toLowerCase().trim() 
+            return item.cname.toLowerCase().trim() === search.toLowerCase().trim()
         });
         if (id.length === 0) {
             text = document.createTextNode("Nothing found");
