@@ -21,7 +21,6 @@ export function PostDetail() {
     const rawNameString = params.post;
     let nameString = (rawNameString).replace('%20', " ").replace('@', "%40");
     let postID = nameString.split("/")[nameString.split("/").length - 1];
-    console.log(postID)
 
     const [postData, setpostData] = useState([])
     useEffect(() => {

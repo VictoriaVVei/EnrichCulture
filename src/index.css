@@ -442,6 +442,21 @@ main {
   height: 100%;
 }
 
+.favButton{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 40px;
+}
+
+.like {
+  color: #ff8f8f;
+}
+
+.dislike{
+  color: #8a8a8a;
+}
+
 .changePage {
   display: flex;
   flex-wrap: wrap;
@@ -467,7 +482,7 @@ main {
   background-color: #fd6868;
 }
 
-.noPostAlert{
+.noPostAlert {
   display: flex;
   font-size: 20px;
   justify-content: center;
@@ -849,6 +864,10 @@ input:checked+.slider:before {
 .typeList li:hover,
 .addDiv:hover {
   opacity: 0.5;
+}
+
+.like:hover{
+  transform: scale(1.2);
 }
 
 .seeAuthor:hover {

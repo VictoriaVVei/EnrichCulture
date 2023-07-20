@@ -30,7 +30,8 @@ export function Account() {
     const [location, setlocation] = useState("")
     const [post_num, setpost_num] = useState("")
     const [followers_num, setfollowers_num] = useState("")
-    const [following_num, following] = useState("")
+    const [following_num, setfollowing] = useState("")
+    const [Fav, setFav] = useState("")
 
     useEffect(() => {
         if (userData.length > 0) {
@@ -41,15 +42,18 @@ export function Account() {
             localStorage.setItem("location", userData[0].Personal_Information.location.length > 0 ? userData[0].Personal_Information.location : "")
             setpost_num(userData[0].PostNum)
             setfollowers_num(userData[0].Followers.length)
-            following(userData[0].Following.length)
+            setfollowing(userData[0].Following.length)
+            setFav(userData[0].Fav)
         }
     }, [userData])
 
 
     const [currentLocation, setcurrentLocation] = useState("Posts")
     const switchPost = (e) => {
+        setclick(click + 1)
         let { value } = e.target.dataset
         setcurrentLocation(value)
+        setPage_Num(0)
     }
 
     useEffect(() => {
@@ -69,11 +73,21 @@ export function Account() {
         }
     })
 
+    const logout = async () => {
+        localStorage.removeItem("loginUser")
+        localStorage.removeItem("location")
+        await signOut(auth).then(() => {
+            window.location.href = "/signin"
+        })
+    }
+
     const [Page_Num, setPage_Num] = useState(0)
     const [click, setclick] = useState(1)
     const [sep_page, setsep_page] = useState([])
     const [postData, setpostData] = useState([])
     const [postData_last, setpostData_last] = useState(null)
+
+    const [postData2, setpostData2] = useState([])
 
     const last_page = () => {
         if (Page_Num - 1 >= 0) {
@@ -83,50 +97,65 @@ export function Account() {
     }
 
     const next_page = () => {
-        if (postData.length < 6) {
-            return;
-        }
+        if (currentLocation === "Posts") {
+            if (postData.length < 6) {
+                return;
+            }
 
-        if (postData_last) {
-            setclick(click + 1)
-            setPage_Num(Page_Num + 1)
-            setsep_page(prev => [...prev, postData_last])
+            if (postData_last) {
+                setclick(click + 1)
+                setPage_Num(Page_Num + 1)
+                setsep_page(prev => [...prev, postData_last])
+            }
+        } else {
+            if (postData2.length < 6) {
+                return;
+            } else {
+                setclick(click + 1)
+                setPage_Num(Page_Num + 1)
+            }
         }
-    }
-
-    const logout = async () => {
-        localStorage.removeItem("loginUser")
-        localStorage.removeItem("location")
-        await signOut(auth).then(() => {
-            window.location.href = "/signin"
-        })
     }
 
     useEffect(() => {
-        if (Page_Num === 0) {
-            getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), limit(6)))
-                .then((querySnapshot) => {
-                    const data = querySnapshot.docs.map((doc) => doc.data())
-                    setpostData(data)
-
-                    const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-                    setpostData_last(lastVisible)
-                })
-        } else {
-            if (sep_page[Page_Num - 1]) {
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(6)))
+        if (currentLocation === "Posts") {
+            if (Page_Num === 0) {
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), limit(6)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
                         setpostData(data)
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
-                        if (lastVisible) {
-                            setpostData_last(lastVisible)
-                        } else {
-                            setPage_Num(Page_Num - 1)
-                        }
+                        setpostData_last(lastVisible)
+                    })
+            } else {
+                if (sep_page[Page_Num - 1]) {
+                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(6)))
+                        .then((querySnapshot) => {
+                            const data = querySnapshot.docs.map((doc) => doc.data())
+                            setpostData(data)
+
+                            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+                            if (lastVisible) {
+                                setpostData_last(lastVisible)
+                            } else {
+                                setPage_Num(Page_Num - 1)
+                            }
+                        })
+                }
+            }
+        } else {
+            let data_final = []
+            for (let i = 6 * Page_Num; i < (Fav.length < 6 * (Page_Num + 1) ? Fav.length : 6 * (Page_Num + 1)); i++) {
+                console.log(6 * (Page_Num + 1))
+                console.log(Fav[i])
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.postID", "==", Fav[i])))
+                    .then((querySnapshot) => {
+                        const data = querySnapshot.docs.map((doc) => doc.data())
+                        data_final.push(data[0])
                     })
             }
+            setpostData2(data_final)
         }
     }, [click])
 
@@ -172,7 +201,11 @@ export function Account() {
                             </NavLink>
                         </div>
                     </div> */}
-                    <RenderCard postData={postData} />
+                    {currentLocation === "Posts" ?
+                        <><RenderCard postData={postData} />
+                        </> : <RenderCard postData={postData2} />
+                    }
+
                     <div className='changePage' >
                         <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
                         <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
