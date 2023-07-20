@@ -764,6 +764,50 @@ input:checked+.slider:before {
   font-weight: normal;
 }
 
+/* ------ */
+/* Diversity */
+/* ------ */
+/* -Page Setting- */
+#Diversity {
+  /* Ensure no white space at upper*/
+  margin: 0;
+}
+
+/* -Components Setting- */
+.diversity {
+  animation: slideUp 1s ease;
+  margin-top: 110px;
+}
+
+.whatSearch_type {
+  max-width: 680px;
+  margin: auto;
+  padding-left: 30px;
+}
+
+.whatSearch_type p {
+  font-size: 30px;
+  font-weight: bolder;
+}
+
+.whatSearch_type p span {
+  font-size: 20px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.atBottom {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 800px;
+  animation: doNotshowFirst 2s forwards;
+  opacity: 0;
+  visibility: hidden;
+}
+
 
 /* ----- */
 /* Hover */
@@ -868,5 +912,22 @@ input:checked+.slider:before {
   to {
     top: 0px;
     opacity: 0;
+  }
+}
+
+@keyframes doNotshowFirst {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  50% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    opacity: 1;
+    visibility: visible;
   }
 }

@@ -81,7 +81,7 @@ export function Account() {
     }
 
     const next_page = () => {
-        if (postData.length < 9) {
+        if (postData.length < 6) {
             return;
         }
 
@@ -94,7 +94,7 @@ export function Account() {
 
     useEffect(() => {
         if (Page_Num === 0) {
-            getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), limit(9)))
+            getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), limit(6)))
                 .then((querySnapshot) => {
                     const data = querySnapshot.docs.map((doc) => doc.data())
                     setpostData(data)
@@ -104,7 +104,7 @@ export function Account() {
                 })
         } else {
             if (sep_page[Page_Num - 1]) {
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(6)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
                         setpostData(data)
