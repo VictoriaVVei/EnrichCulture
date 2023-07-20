@@ -173,7 +173,7 @@ export function MakePost() {
         }
     }
 
-    const submit = async () => {
+    const submit = async (e) => {
         const image = document.querySelector(".uploadImg");
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
@@ -210,6 +210,8 @@ export function MakePost() {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
             } else {
+                e.target.style.display = "none"
+
                 let loginUser = localStorage.getItem("loginUser")
                 let postID = getRandomInt(1000, 9999) + "&" + cname + "&" + loginUser;
                 const storageRef = ref(storage, "Post Image/" + postID);
@@ -239,7 +241,7 @@ export function MakePost() {
                                 pic: downloadURL,
                                 author: loginUser,
                                 isFestival: checkFestival,
-                                format:format
+                                format: format
                             }
                         }
 
@@ -458,7 +460,7 @@ export function MakePost() {
                     />
                     {/* <hr /> */}
 
-                    <div className='decorate_signin' onClick={submit} style={{ marginBottom: "40px" }}>Submit</div>
+                    <div className='decorate_signin' onClick={(e) => submit(e)} style={{ marginBottom: "40px" }}>Submit</div>
                 </form>
                 <div id="snackbar"></div>
             </div>

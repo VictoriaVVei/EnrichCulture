@@ -33,6 +33,7 @@ export function OtherUserAccount() {
     const [followers_num, setfollowers_num] = useState("")
     const [following_num, setfollowing] = useState("")
     const [email, setemail] = useState("")
+    const [ifPrivate, setifPrivate] = useState("")
 
     useEffect(() => {
         if (userData.length > 0) {
@@ -45,6 +46,7 @@ export function OtherUserAccount() {
             setfollowers_num(userData[0].Followers.length)
             setfollowing(userData[0].Following.length)
             setemail(userData[0].Personal_Information.email)
+            setifPrivate(userData[0].Personal_Information.ifPrivate)
         }
     }, [userData, click2])
 
@@ -182,9 +184,24 @@ export function OtherUserAccount() {
                             </NavLink>
                         </div>
                     </div> */}
-                    {postData.length !== 0 ?
-                        <><RenderCard postData={postData} />
-                        </> : <div className='noPostAlert'>This user has no post</div>
+                    {loginUser && loginUser.length > 0 ?
+                        <>
+                            {ifPrivate === false ?
+                                <>
+                                    {postData.length !== 0 ?
+                                        <><RenderCard postData={postData} />
+                                        </> : <div className='noPostAlert'>This user has no post</div>
+                                    }
+                                </> :
+                                <div className='noPostAlert'>
+                                    This is private account.
+                                </div>
+                            }
+
+                        </> :
+                        <div className='noPostAlert'>
+                            You should log in first, before checking others' account.
+                        </div>
                     }
 
                     <div className='changePage' >

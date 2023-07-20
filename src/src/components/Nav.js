@@ -4,6 +4,11 @@ import { NavLink } from 'react-router-dom';
 export function Nav() {
     let loginUser = localStorage.getItem("loginUser")
 
+    const topFunction = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    };
+
     let currentLocation = window.location.href.split("/")[window.location.href.split("/").length - 1]
     useEffect(() => {
         let currentPage = document.querySelectorAll(".Nav1 ul a li")
@@ -40,22 +45,22 @@ export function Nav() {
         <div id="Nav">
             <div className='Nav1'>
                 <ul>
-                    <NavLink to="/main"><li className='logoName'>Enrich<br /> Culture</li></NavLink>
-                    <NavLink to="/diversity"><li>Diversity</li></NavLink>
-                    <NavLink to="/festival"><li>Festival</li></NavLink>
+                    <NavLink to="/main" onClick={topFunction}><li className='logoName'>Enrich<br /> Culture</li></NavLink>
+                    <NavLink to="/diversity" onClick={topFunction}><li>Diversity</li></NavLink>
+                    <NavLink to="/festival" onClick={topFunction}><li>Festival</li></NavLink>
                     {loginUser !== null ? (
                         <NavLink to="/account">
-                            <li className="profile_avatar material-symbols-outlined">
+                            <li className="profile_avatar material-symbols-outlined" onClick={topFunction}>
                                 account_circle
                             </li>
                         </NavLink>
                     ) : (
                         currentLocation === "signin" ? (
-                            <NavLink to="/signup" title='Click to Sign up'>
+                            <NavLink to="/signup" title='Click to Sign up' onClick={topFunction}>
                                 <li>Sign up</li>
                             </NavLink>
                         ) : (
-                            <NavLink to="/signin" title='Click to Log in'>
+                            <NavLink to="/signin" title='Click to Log in' onClick={topFunction}>
                                 <li>Log in</li>
                             </NavLink>
                         )
