@@ -745,7 +745,7 @@ input:checked+.slider:before {
 
 .postDetail_container {
   width: 80%;
-  max-width: 800px;
+  max-width: 600px;
   margin: auto;
   margin-bottom: 40px;
 }
@@ -765,7 +765,7 @@ input:checked+.slider:before {
   background-color: #a9b5b9;
   margin-top: 80px;
   text-align: center;
-  padding: 30px;
+  padding: 50px 0px;
   position: relative;
   border-radius: 7px;
   font-weight: bolder;

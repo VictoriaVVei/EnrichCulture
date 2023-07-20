@@ -42,7 +42,7 @@ export function MainPage() {
                 return (
                     <li className=''>
                         There is no culture record from your country. 
-                        Revise country in your account or just make a new post after log in.
+                        Revise country in your account or just make a new post.
                     </li>
                 );
             });
