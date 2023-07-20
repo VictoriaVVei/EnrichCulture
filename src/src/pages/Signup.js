@@ -35,7 +35,7 @@ export function Signup() {
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
         let text = "";
-        text = document.createTextNode("Do not support");
+        text = document.createTextNode("Do not support currently");
         tips.appendChild(text)
         tips.className = "show";
         setTimeout(() => {
@@ -43,7 +43,7 @@ export function Signup() {
         }, 2000);
     }
 
-    const signup = async () => {
+    const signup = async (e) => {
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
         let text = "";
@@ -99,6 +99,9 @@ export function Signup() {
                     "Followers": [],
                     "Following": [],
                 }
+
+                e.target.style.display = "none"
+
                 setDoc(doc(cloudStore, "userData", userID), docData)
                     .then(() => {
                         setTimeout(() => {
@@ -182,7 +185,7 @@ export function Signup() {
                         />
                         <hr />
 
-                        <div className='decorate_signin' onClick={signup}>Sign up</div>
+                        <div className='decorate_signin' onClick={(e) => signup(e)}>Sign up</div>
                         <div>
                             <p>Already have an account? &nbsp;
                                 <span

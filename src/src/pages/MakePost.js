@@ -287,6 +287,7 @@ export function MakePost() {
 
                         setDoc(doc(cloudStore, "postData", postID), docData).then(() => {
                             tips.className = tips.className.replace("show", "disappear");
+                            tips.style.backgroundColor ="#54b37b"
                             tips.innerHTML = '';
                             text = document.createTextNode("Finished Processing");
                             tips.appendChild(text)

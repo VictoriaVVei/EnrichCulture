@@ -6,8 +6,7 @@ import { collection, query, where, getDocs, orderBy, limit } from 'firebase/fire
 import { cloudStore } from '../../firebase';
 
 export function PostDetail() {
-    let location_test = localStorage.getItem("location") !== null ? localStorage.getItem("location") : "China"
-
+    let location_test = localStorage.getItem("location") ? localStorage.getItem("location") : "China"
     const topFunction = () => {
         document.body.scrollTop = 0; // For Safari
         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
@@ -66,15 +65,15 @@ export function PostDetail() {
 
     const seeAuthor = (e) => {
         let value = e.target.dataset.value
-        window.location.href = "/otheruser/" + { value }
+        window.location.href = `/otherUserAccount/${value}`
     }
 
-    const convertDate = (location) => {
-        let timeZone = timeZones[location].zone;
+    const convertDate = (location_test) => {
+        let timeZone = timeZones[location_test].zone
         let userDate = moment(`${year}-${month}-${day}`).tz(timeZone);
-        settimeInterval(timeZones[location].zone.split("/")[1])
+        settimeInterval(timeZones[location_test].zone.split("/")[1])
 
-        switch (location) {
+        switch (location_test) {
             case 'US' || 'England':
                 setmonth(userDate.format('MM'));
                 setday(userDate.format('DD'));
