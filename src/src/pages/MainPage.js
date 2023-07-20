@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'; //import React Component
+import { useNavigate } from 'react-router-dom';
 import { Nav } from '../components/Nav';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { cloudStore } from '../../firebase';
@@ -41,7 +42,7 @@ export function MainPage() {
             dom = (() => {
                 return (
                     <li className=''>
-                        There is no culture record from your country. 
+                        There is no culture record from your country.
                         Revise country in your account or just make a new post.
                     </li>
                 );
@@ -124,7 +125,7 @@ export function MainPage() {
                 const autoComplete = similarity.map((content) => {
                     let postName = content.word_database;
                     let postID = content.id
-                    let author = postID.split(":&:")[4] + " " + postID.split(":&:")[3]
+                    let author = postID.split("&")[4] + " " + postID.split("&")[3]
                     return (
                         <li className='addDiv' key={postID} data-value={postID} data-values={postName} onClick={(e) => fillIn(e)}>
                             {postName + ": " + author}
@@ -163,13 +164,14 @@ export function MainPage() {
         option.style.color = "#9687b3"
     }
 
+    const navigate = useNavigate();
     const submit = () => {
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
         let text = "";
 
         let id = nameData[0].Added_Culture.Cultures.filter((item) => {
-            return item.cname === search
+            return item.cname.toLowerCase().trim() === search.toLowerCase().trim() 
         });
         if (id.length === 0) {
             text = document.createTextNode("Nothing found");
@@ -187,7 +189,8 @@ export function MainPage() {
             }, 2000);
         } else {
             topFunction()
-            window.location.href = `/postDetail/${search_id.length > 0 ? search_id : id[0].postID}`
+            const newUrl = `/postDetail/${search_id.length > 0 ? search_id : id[0].postID}`;
+            navigate(newUrl);
         }
     }
 

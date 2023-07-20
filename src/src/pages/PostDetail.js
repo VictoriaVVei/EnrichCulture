@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'; //import React Component
 import { Nav } from '../components/Nav';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import moment from 'moment-timezone';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { cloudStore } from '../../firebase';
@@ -19,8 +19,9 @@ export function PostDetail() {
 
     const params = useParams();
     const rawNameString = params.post;
-    let nameString = (rawNameString).replace('%20', " ");
+    let nameString = (rawNameString).replace('%20', " ").replace('@', "%40");
     let postID = nameString.split("/")[nameString.split("/").length - 1];
+    console.log(postID)
 
     const [postData, setpostData] = useState([])
     useEffect(() => {
@@ -63,9 +64,11 @@ export function PostDetail() {
         }
     }, [postData])
 
+    const navigate = useNavigate();
     const seeAuthor = (e) => {
         let value = e.target.dataset.value
-        window.location.href = `/otherUserAccount/${value}`
+        const newUrl = `/otherUserAccount/${value}`;
+        navigate(newUrl);
     }
 
     const convertDate = (location_test) => {
@@ -121,7 +124,7 @@ export function PostDetail() {
                         <p>{formatDate()} <br />(in {timeInterval} time zone)</p>
                         <p><span title='Site'>#{location}</span>, <span title='Name'>{cname}</span> <span title='Type'>({type})</span></p>
                         <p style={{ marginBottom: "80px" }} title='Introduction'>{intro}</p>
-                        <div data-value={author} onClick={(e) => seeAuthor(e)} className="seeAuthor">View Owner</div>
+                        <div data-value={author} onClick={(e) => seeAuthor(e)} className="seeAuthor">View Author</div>
                     </div>
                 </div>
             </div>

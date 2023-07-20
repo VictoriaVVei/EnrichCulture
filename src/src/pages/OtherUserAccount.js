@@ -10,7 +10,7 @@ export function OtherUserAccount() {
 
     const params = useParams();
     const rawNameString = params.user;
-    let nameString = (rawNameString).replace('%20', " ");
+    let nameString = (rawNameString).replace('%20', " ").replace('@', "%40");
     let userID = nameString.split("/")[nameString.split("/").length - 1];
 
     const [click2, setclick2] = useState(1)
@@ -36,7 +36,7 @@ export function OtherUserAccount() {
 
     useEffect(() => {
         if (userData.length > 0) {
-            setimg(userData[0].Personal_Information.img.length > 0 ? userData[0].Personal_Information.img : "./img/test.png")
+            setimg(userData[0].Personal_Information.img.length > 0 ? userData[0].Personal_Information.img : "https://firebasestorage.googleapis.com/v0/b/enrichculture-4cc43.appspot.com/o/Default%2Ftest.png?alt=media&token=5ef4adc4-ab00-4715-b5ff-8aaa0b4dbdef")
             setname(userData[0].Personal_Information.fname + " " + userData[0].Personal_Information.lname)
             setbio(userData[0].Personal_Information.bio.length > 0 ? userData[0].Personal_Information.bio : "")
             setlocation(userData[0].Personal_Information.location.length > 0 ? userData[0].Personal_Information.location : "")

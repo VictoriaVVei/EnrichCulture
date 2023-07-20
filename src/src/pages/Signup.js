@@ -52,8 +52,8 @@ export function Signup() {
             const checkEmail = await getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.email", "==", email))); //Check email exsit
             const checkEmail_array = checkEmail.docs.map(doc => doc.data()); //Change promise to array
 
-            if (fname.match("%20") || fname.match(":&:") || lname.match("%20") || lname.match(":&:")) {
-                text = document.createTextNode("String ':&:' and '%20' are not allowed");
+            if (fname.match("%20") || fname.match("&") || lname.match("%20") || lname.match("&")) {
+                text = document.createTextNode("String '&' and '%20' are not allowed");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {
@@ -81,7 +81,7 @@ export function Signup() {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
             } else {
-                let userID = getRandomInt(1000, 9999) + ":&:" + lname + ":&:" + fname + ":&:" + email;
+                let userID = getRandomInt(1000, 9999) + "&" + lname + "&" + fname + "&" + email.replace('@', "%40");
                 createUserWithEmailAndPassword(auth, email, password);
                 const docData = {
                     "Personal_Information": {
