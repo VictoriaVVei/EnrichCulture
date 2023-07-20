@@ -34,7 +34,7 @@ export function ReviseAccount() {
                 setfname(data[0].Personal_Information.fname)
                 setlname(data[0].Personal_Information.lname)
                 setbio(data[0].Personal_Information.bio)
-                setlocation(data[0].Personal_Information.location.length > 0 ? data[0].Personal_Information.location : "China")
+                setlocation(data[0].Personal_Information.location)
             }
         }
     })
@@ -145,6 +145,7 @@ export function ReviseAccount() {
                         updateDoc(doc(cloudStore, "userData", loginUser), docData)
                             .then(() => {
                                 text = document.createTextNode("Finished Processing");
+                                tips.style.backgroundColor = "#54b37b"
                                 tips.appendChild(text)
                                 tips.className = "show";
                                 setTimeout(() => {
@@ -189,11 +190,14 @@ export function ReviseAccount() {
         const selectElement = document.querySelector('#location');
         const options = Array.from(selectElement.options);
 
-        options.forEach(option => {
-            if (option.value === location) {
-                selectElement.removeChild(option);
-            }
-        });
+        if (location.length !== 0) {
+            options.forEach(option => {
+                if (option.value === location) {
+                    selectElement.removeChild(option);
+                }
+            });
+        }
+
     }, [])
 
     return (

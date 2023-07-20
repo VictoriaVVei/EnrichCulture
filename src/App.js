@@ -9,6 +9,7 @@ import { ReviseAccount } from './src/pages/ReviseAccount';
 import { Diversity } from './src/pages/Diversity'
 import { PostDetail } from './src/pages/PostDetail';
 import { Festival } from './src/pages/Festival';
+import { OtherUserAccount } from './src/pages/OtherUserAccount'; 
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="diversity" element={<Diversity />} />
         <Route path="festival" element={<Festival />} />
         <Route path="/postDetail/:post" element={<PostDetail />} />
+        <Route path="/otherUserAccount/:user" element={<OtherUserAccount />} />
       </Routes>
     </div>
   );

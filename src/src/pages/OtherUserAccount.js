@@ -2,27 +2,28 @@ import React, { useEffect, useRef, useState } from 'react'; //import React Compo
 import { Nav } from '../components/Nav';
 import { RenderCard } from '../components/RenderCard';
 import { cloudStore } from '../../firebase';
-import { collection, query, where, getDocs, orderBy, limit, startAfter } from 'firebase/firestore';
-import { NavLink } from 'react-router-dom';
-import { signOut } from '@firebase/auth';
-import { auth } from '../../firebase';
+import { collection, query, where, getDocs, orderBy, limit, startAfter, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { useParams } from 'react-router';
 
-export function Account() {
+export function OtherUserAccount() {
     let loginUser = localStorage.getItem("loginUser")
 
-    const topFunction = () => {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    };
+    const params = useParams();
+    const rawNameString = params.user;
+    let nameString = (rawNameString).replace('%20', " ");
+    let userID = nameString.split("/")[nameString.split("/").length - 1];
+
+    const [click2, setclick2] = useState(1)
+    const [ifFollow, setifFollow] = useState(false)
 
     const [userData, setuserData] = useState([])
     useEffect(() => {
-        getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", loginUser)))
+        getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", userID)))
             .then((querySnapshot) => {
                 const data = querySnapshot.docs.map((doc) => doc.data());
                 setuserData(data)
             })
-    }, []);
+    }, [click2]);
 
     const [img, setimg] = useState("")
     const [name, setname] = useState("")
@@ -30,7 +31,8 @@ export function Account() {
     const [location, setlocation] = useState("")
     const [post_num, setpost_num] = useState("")
     const [followers_num, setfollowers_num] = useState("")
-    const [following_num, following] = useState("")
+    const [following_num, setfollowing] = useState("")
+    const [email, setemail] = useState("")
 
     useEffect(() => {
         if (userData.length > 0) {
@@ -41,33 +43,10 @@ export function Account() {
             localStorage.setItem("location", userData[0].Personal_Information.location.length > 0 ? userData[0].Personal_Information.location : "")
             setpost_num(userData[0].PostNum)
             setfollowers_num(userData[0].Followers.length)
-            following(userData[0].Following.length)
+            setfollowing(userData[0].Following.length)
+            setemail(userData[0].Personal_Information.email)
         }
-    }, [userData])
-
-
-    const [currentLocation, setcurrentLocation] = useState("Posts")
-    const switchPost = (e) => {
-        let { value } = e.target.dataset
-        setcurrentLocation(value)
-    }
-
-    useEffect(() => {
-        let currentPage = document.querySelectorAll(".post_button ul li")
-
-        if (currentLocation === "Posts") {
-            currentPage.forEach((content) => {
-                content.classList.remove("dashed_decoration2");
-            })
-            currentPage[0].classList.add("dashed_decoration2");
-        }
-        if (currentLocation === "Fav") {
-            currentPage.forEach((content) => {
-                content.classList.remove("dashed_decoration2");
-            })
-            currentPage[1].classList.add("dashed_decoration2");
-        }
-    })
+    }, [userData, click2])
 
     const [Page_Num, setPage_Num] = useState(0)
     const [click, setclick] = useState(1)
@@ -94,17 +73,9 @@ export function Account() {
         }
     }
 
-    const logout = async () => {
-        localStorage.removeItem("loginUser")
-        localStorage.removeItem("location")
-        await signOut(auth).then(() => {
-            window.location.href = "/signin"
-        })
-    }
-
     useEffect(() => {
         if (Page_Num === 0) {
-            getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), limit(6)))
+            getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", userID), orderBy("Post_Information.date", "desc"), limit(6)))
                 .then((querySnapshot) => {
                     const data = querySnapshot.docs.map((doc) => doc.data())
                     setpostData(data)
@@ -114,7 +85,7 @@ export function Account() {
                 })
         } else {
             if (sep_page[Page_Num - 1]) {
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(6)))
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", userID), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(6)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
                         setpostData(data)
@@ -130,6 +101,46 @@ export function Account() {
         }
     }, [click])
 
+    useEffect(() => {
+        if (userData.length > 0) {
+            if (userData[0].Followers.includes(loginUser)) {
+                console.log(1)
+                setifFollow(true)
+            } else {
+                console.log(2)
+                setifFollow(false)
+            }
+        }
+    })
+
+    const follow = () => {
+        setclick2(click2 + 1)
+        console.log(ifFollow)
+        if (!ifFollow) {
+            // console.log(1)
+            const docData_follower = {
+                "Followers": arrayUnion(loginUser)
+            }
+            updateDoc(doc(cloudStore, "userData", userID), docData_follower)
+
+            const docData_following = {
+                "Following": arrayUnion(userID)
+            }
+            updateDoc(doc(cloudStore, "userData", loginUser), docData_following)
+        } else {
+            // console.log(2)
+            const docData_follower = {
+                "Followers": arrayRemove(loginUser)
+            }
+            updateDoc(doc(cloudStore, "userData", userID), docData_follower)
+
+            const docData_following = {
+                "Following": arrayRemove(userID)
+            }
+            updateDoc(doc(cloudStore, "userData", loginUser), docData_following)
+        }
+    }
+
     return (
         <div id="Account">
             <Nav />
@@ -143,9 +154,9 @@ export function Account() {
                         <h3>{name}</h3>
                         <p>{bio}</p>
                         <p>{location}</p>
-                        <div className='edit'><NavLink to="/reviseAccount" onClick={topFunction}>Edit Your Profile</NavLink></div>
-                        <div className='make'><NavLink to="/makePost" onClick={topFunction}>Make a post</NavLink></div>
-                        <div className='make' onClick={logout}>Log Out</div>
+                        <div className={`edit ${!ifFollow ? 'otherEdit' : 'otherEdit2'}`} onClick={follow}>{ifFollow ? 'Unfollow' : 'Follow'}</div>
+                        <div className='make'>Contact</div>
+                        <div className='make' title={email} style={{ cursor: "auto" }}>E-mail</div>
                     </div>
 
                     <div className='info_website'>
@@ -157,8 +168,7 @@ export function Account() {
                 <div className='post'>
                     <div className='post_button'>
                         <ul>
-                            <li data-value="Posts" onClick={(e) => switchPost(e)}>Posts</li>
-                            <li data-value="Fav" onClick={(e) => switchPost(e)}>Fav</li>
+                            <li data-value="Posts" >Posts</li>
                         </ul>
                     </div>
                     {/* <div className='posts'>
@@ -172,7 +182,11 @@ export function Account() {
                             </NavLink>
                         </div>
                     </div> */}
-                    <RenderCard postData={postData} />
+                    {postData.length !== 0 ?
+                        <><RenderCard postData={postData} />
+                        </> : <div className='noPostAlert'>This user has no post</div>
+                    }
+
                     <div className='changePage' >
                         <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
                         <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>

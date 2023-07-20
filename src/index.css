@@ -457,6 +457,21 @@ main {
   margin: 30px auto 10px auto;
 }
 
+.otherEdit {
+  background-color: #2196F3;
+}
+
+.otherEdit2 {
+  background-color: #fd6868;
+}
+
+.noPostAlert{
+  display: flex;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
 /* --- */
 /* Add */
 /* --- */
@@ -801,6 +816,9 @@ input:checked+.slider:before {
   animation: doNotshowFirst 2s forwards;
 }
 
+.diversity .posts {
+  min-height: 600px;
+}
 
 /* ----- */
 /* Hover */

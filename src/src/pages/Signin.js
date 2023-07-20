@@ -27,7 +27,7 @@ export function Signin() {
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
         let text = "";
-        text = document.createTextNode("Do not support");
+        text = document.createTextNode("Do not support currently");
         tips.appendChild(text)
         tips.className = "show";
         setTimeout(() => {
@@ -70,6 +70,7 @@ export function Signin() {
                         }, 2000);
                     } else {
                         text = document.createTextNode("Successfully Log in");
+                        tips.style.backgroundColor ="#54b37b"
                         tips.appendChild(text)
                         tips.className = "show";
                         setTimeout(() => {

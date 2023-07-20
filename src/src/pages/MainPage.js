@@ -41,7 +41,8 @@ export function MainPage() {
             dom = (() => {
                 return (
                     <li className=''>
-                        There is not culture record from your country
+                        There is no culture record from your country. 
+                        Revise country in your account or just make a new post after log in.
                     </li>
                 );
             });
