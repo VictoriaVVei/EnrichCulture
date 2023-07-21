@@ -9,6 +9,7 @@ export function MakePost() {
     const [year, setyear] = useState("Every Year")
     const [month, setmonth] = useState("01")
     const [checkday, setcheckday] = useState(false)
+    const [checkdate, setcheckdate] = useState(true)
     const [day, setday] = useState("")
     const [location, setlocation] = useState("China")
     const [type, settype] = useState("Festival")
@@ -164,6 +165,17 @@ export function MakePost() {
         settype2(value)
     }
 
+    const check_date = () => {
+        if (!checkdate) {
+            setcheckdate(true)
+        } else {
+            setcheckdate(false)
+            setyear("")
+            setday("")
+            setmonth("")
+        }
+    }
+
     const check_year = () => {
         if (!checkday) {
             setcheckday(true)
@@ -187,7 +199,9 @@ export function MakePost() {
         }
 
         if (image.value.length !== 0 && cname.trim().length > 0 && year.trim().length > 0 && month.trim().length > 0
-            && day.trim().length > 0 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0) {
+            && day.trim().length > 0 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0
+            || (checkdate === false && image.value.length !== 0 && cname.trim().length > 0
+                && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0)) {
             if (cname.match("%20") || cname.match("&")) {
                 text = document.createTextNode("String '&' and '%20' are not allowed");
                 tips.appendChild(text)
@@ -195,7 +209,7 @@ export function MakePost() {
                 setTimeout(() => {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
-            } else if (year !== "Every Year" && !isValidDate(parseInt(year), parseInt(month), parseInt(day))) {
+            } else if (checkdate === true && year !== "Every Year" && !isValidDate(parseInt(year), parseInt(month), parseInt(day))) {
                 text = document.createTextNode("Invaild day");
                 tips.appendChild(text)
                 tips.className = "show";
@@ -204,6 +218,13 @@ export function MakePost() {
                 }, 2000);
             } else if (check_type.includes(",") || check_type.includes("，")) {
                 text = document.createTextNode("One type only");
+                tips.appendChild(text)
+                tips.className = "show";
+                setTimeout(() => {
+                    tips.className = tips.className.replace("show", "disappear");
+                }, 2000);
+            } else if (type2.toLowerCase().trim() === "festival") {
+                text = document.createTextNode("You cannot write this type here");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {
@@ -368,50 +389,54 @@ export function MakePost() {
                     />
 
                     <div className='date'>
-                        <div className="accept_box">
-                            <label><input id="checkBox" onClick={check_year} className="accept_button" type="checkbox" />
-                                Have a Specific year?
-                            </label>
-                        </div>
-                        {checkday === true ?
+                        {checkdate === true ?
                             <>
-                                <label htmlFor="year">Year: </label>
+                                <div className="accept_box">
+                                    <label><input id="checkBox" onClick={check_year} className="accept_button" type="checkbox" />
+                                        Have a Specific year?
+                                    </label>
+                                </div>
+                                {checkday === true ?
+                                    <>
+                                        <label htmlFor="year">Year: </label>
+                                        <input
+                                            type="text"
+                                            id="year"
+                                            name="year"
+                                            // placeholder="Write your Last Name"
+                                            onChange={(e) => handleInputChange(e)}
+                                            value={year}
+                                            style={{ outline: "auto", border: "auto", marginRight: "20px" }}
+                                        />
+                                    </> : null
+                                }
+                                <label htmlFor="month">Month: </label>
+                                <select id="month" onChange={(e) => handleInputChange(e)} style={{ marginRight: "20px" }}>
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <label htmlFor="day">Day: </label>
                                 <input
-                                    type="text"
-                                    id="year"
-                                    name="year"
+                                    type="number"
+                                    id="day"
+                                    name="day"
                                     // placeholder="Write your Last Name"
                                     onChange={(e) => handleInputChange(e)}
-                                    value={year}
+                                    value={day}
                                     style={{ outline: "auto", border: "auto", marginRight: "20px" }}
                                 />
                             </> : null
                         }
-                        <label htmlFor="month">Month: </label>
-                        <select id="month" onChange={(e) => handleInputChange(e)} style={{ marginRight: "20px" }}>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                            <option value="04">04</option>
-                            <option value="05">05</option>
-                            <option value="06">06</option>
-                            <option value="07">07</option>
-                            <option value="08">08</option>
-                            <option value="09">09</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                        </select>
-                        <label htmlFor="day">Day: </label>
-                        <input
-                            type="number"
-                            id="day"
-                            name="day"
-                            // placeholder="Write your Last Name"
-                            onChange={(e) => handleInputChange(e)}
-                            value={day}
-                            style={{ outline: "auto", border: "auto", marginRight: "20px" }}
-                        />
                         <br />
                         <label htmlFor="location">Location: </label>
                         <select id="location" onChange={(e) => handleInputChange(e)} style={{ marginRight: "20px" }}>
@@ -429,6 +454,11 @@ export function MakePost() {
                     </div>
                     {type === "" ?
                         <>
+                            <div className="accept_box">
+                                <label><input id="checkBox" onClick={check_date} className="accept_button" type="checkbox" />
+                                    Not sure the date?
+                                </label>
+                            </div>
                             <div
                                 ref={other}>
                                 <label htmlFor="otherCate">Enter type:</label>
