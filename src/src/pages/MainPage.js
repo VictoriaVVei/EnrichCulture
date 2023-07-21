@@ -211,14 +211,9 @@ export function MainPage() {
     return (
         <div id="MainPage">
             <Nav />
+            <div className='forBg1'></div>
             <div className='mainPage'>
-                <h1>Reimagine <br />Culture</h1>
-                <div className='explore_div'>
-                    <h2 style={{ marginBottom: "40px" }}>Explore Diversity</h2>
-                    <ul className='location_recon'>
-                        {location_recon_dom}
-                    </ul>
-                </div>
+                <div className='welcomeBoard'><h1>Reimagine <br />Culture</h1></div>
                 <div className='search'>
                     <div id="snackbar" style={{ top: "0" }}></div>
                     <form>
@@ -249,7 +244,14 @@ export function MainPage() {
                         </div>
                     </form>
                 </div>
+                <div className='explore_div'>
+                    <h2 style={{ marginBottom: "40px" }}>Explore Diversity</h2>
+                    <ul className='location_recon'>
+                        {location_recon_dom}
+                    </ul>
+                </div>
             </div>
+            <div className='forBg2'></div>
         </div>
     );
 }

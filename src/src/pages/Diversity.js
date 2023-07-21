@@ -105,8 +105,9 @@ export function Diversity() {
     return (
         <div id="Diversity">
             <Nav />
+            <div className='forBg1'></div>
             <div className='diversity'>
-                <div className='welcomeBoard'></div>
+                <div className='welcomeBoard'><h1>Diversity</h1></div>
                 <div className='whatSearch_type'>
                     <p onClick={close} title="Search in Main Page">What type is being seach: <span title="Click to delete">{whatSearch}</span></p>
                 </div>
@@ -117,6 +118,7 @@ export function Diversity() {
                     <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
                 </div>
             </div>
+            <div className='forBg2'></div>
         </div>
     );
 }

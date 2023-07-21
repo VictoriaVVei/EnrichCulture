@@ -60,8 +60,10 @@ main {
   justify-content: center;
   padding: 25px 0 15px 0;
   margin: 0;
-  background-color: rgb(185, 179, 163);
+  background-image: linear-gradient(rgb(190, 172, 148), transparent);
   border-radius: 0 0 20px 20px;
+  -webkit-backdrop-filter: blur(1px);
+  backdrop-filter: blur(1px);
 }
 
 .Nav1 a {
@@ -116,21 +118,44 @@ main {
   /* Each page needs this css*/
   /* Ensure no white space at upper*/
   margin: 0;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
 }
 
 /* -Components Setting- */
 .mainPage {
   /* Each page needs this css*/
   animation: slideUp 1s ease;
-  margin: 110px 50px 50px 50px;
+  margin: 0px 0px 50px 0px;
+  background-image: linear-gradient(transparent, antiquewhite, transparent);
 }
 
-.mainPage h1 {
-  font-size: 50px;
+.mainPage .welcomeBoard {
+  background-image: url("../public/img/diversityWB.jpg"), linear-gradient(transparent, antiquewhite, transparent);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 45vh;
+  width: 100%;
+  /* max-width: 800px; */
   margin: auto;
-  margin-bottom: 40px;
-  width: 80%;
-  max-width: 800px;
+  height: 45vh;
+  border-radius: 20px;
+  animation: doNotshowFirst 2s forwards;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(255, 255, 255);
+}
+
+.mainPage h1,
+.diversity h1,
+.festival h1 {
+  font-size: 80px;
+  display: inline;
+  justify-content: center;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  letter-spacing: 10px;
 }
 
 .mainPage li {
@@ -138,10 +163,15 @@ main {
 }
 
 .explore_div {
+  background-color: rgba(236, 225, 195, 0.8);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  padding: 40px 40px 20px 40px;
   margin: auto;
-  margin-bottom: 80px;
+  margin-bottom: 0px;
   width: 80%;
   max-width: 800px;
+  margin-top: 80px;
 }
 
 .location_recon {
@@ -162,10 +192,10 @@ main {
 }
 
 .search {
-  background-color: rgb(182, 170, 137, 0.8);
+  /* background-color: rgb(182, 170, 137, 0.8);
   border: 5px solid rgba(97, 93, 82, 0.2);
-  border-radius: 7px;
-  padding: 40px 40px 20px 40px;
+  border-radius: 7px; */
+  padding: 40px 0px 0px 0px;
   width: 80%;
   max-width: 800px;
   margin: auto;
@@ -180,6 +210,8 @@ main {
   border: none;
   width: 100%;
   height: 40px;
+  border-radius: 7px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .search_button {
@@ -334,12 +366,12 @@ main {
   grid-template-columns: 30% 70%;
   grid-template-rows: auto;
   animation: slideUp 1s ease;
-  height: fit-content;
+  height: 100%;
+  min-height: 100vh;
 }
 
 .info {
   margin: 170px 0px 0 60px;
-  height: fit-content;
 }
 
 .info .info_basic {
@@ -427,7 +459,8 @@ main {
   height: fit-content;
   position: relative;
   cursor: pointer;
-  background-color: rgb(182, 170, 137, 0.8);
+  background-color: rgba(218, 200, 151, 0.8);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
   padding: 3px 3px 0px 3px;
 }
 
@@ -476,7 +509,9 @@ main {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  /* margin-right: 25px; */
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 .switchPage {
@@ -891,12 +926,16 @@ input:checked+.slider:before {
   background-image: url("../public/img/bg1.png"), linear-gradient(transparent, antiquewhite, transparent);
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  min-height: 100vh;
+  height: 100%;
 }
 
 .forBg2 {
   background-image: url("../public/img/bg2.png"), linear-gradient(transparent, antiquewhite, transparent);
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  min-height: 100vh;
+  height: 100%;
 }
 
 /* ------ */
@@ -906,37 +945,43 @@ input:checked+.slider:before {
 #Diversity {
   /* Ensure no white space at upper*/
   margin: 0;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  position: relative;
 }
 
 /* -Components Setting- */
 .diversity {
   animation: slideUp 1s ease;
-  margin-top: 70px;
+  background-image: linear-gradient(transparent, antiquewhite, transparent);
+  min-height: 100vh;
+  position: relative;
 }
 
 .diversity .welcomeBoard {
-  background-image: url("../public/img/mainWB.jpeg"), linear-gradient(transparent, antiquewhite, transparent);
+  background-image: url("../public/img/diversity.jpg"), linear-gradient(transparent, antiquewhite, transparent);
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 100% 60%;
-  width: 80%;
+  background-size: 100% 45vh;
+  width: 100%;
   /* max-width: 800px; */
   margin: auto;
-  height: 300px;
+  height: 45vh;
   border-radius: 20px;
-  font-size: 80px;
+  animation: doNotshowFirst 2s forwards;
+
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding-left: 20px;
-  color: #d1a62f;
+  color: rgb(255, 255, 255);
 }
 
 .whatSearch_type {
   max-width: fit-content;
-  margin: 20px auto;
+  margin: 40px auto;
   background-color: rgb(182, 170, 137, 0.8);
   border-radius: 7px;
-  border: 5px solid rgba(97, 93, 82, 0.2);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .whatSearch_type p {
@@ -953,18 +998,116 @@ input:checked+.slider:before {
   background-color: white;
   padding: 5px 10px;
   border-radius: 7px;
+  margin-left: 20px;
 }
 
 .atBottom {
   animation: doNotshowFirst 2s forwards;
   margin-bottom: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .diversity .posts {
-  min-height: 600px;
+  height: fit-content;
   display: grid;
   grid-template-columns: 33% 33% 33%;
-  grid-template-rows: 50% 50%;
+  grid-template-rows: 33% 33% 33%;
+}
+
+/* -------- */
+/* Festival */
+/* -------- */
+#Festival {
+  /* Each page needs this css*/
+  /* Ensure no white space at upper*/
+  margin: 0;
+}
+
+/* -Components Setting- */
+.festival {
+  /* Each page needs this css*/
+  animation: slideUp 1s ease;
+  margin: 0px 0px 50px 0px;
+  background-image: linear-gradient(transparent, antiquewhite, transparent);
+}
+
+.festival .welcomeBoard {
+  background-image: url("../public/img/festivalWB.jpeg"), linear-gradient(transparent, antiquewhite, transparent);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 45vh;
+  width: 100%;
+  /* max-width: 800px; */
+  margin: auto;
+  height: 45vh;
+  border-radius: 20px;
+  animation: doNotshowFirst 2s forwards;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(255, 255, 255);
+}
+
+.festival_grid {
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+
+.festival_filter {
+  grid-column: 1;
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+.festival_filter_month {
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(236, 225, 195, 0.8);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  width: 80%;
+  max-width: 200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.festival_filter_location {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(236, 225, 195, 0.8);
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  width: 80%;
+  max-width: 200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.festival_post {
+  grid-column: 2;
+  position: relative;
+}
+
+.festival_filter_option {
+  margin: 10px;
+}
+
+.checkmark {
+  margin-right: 10px;
+}
+
+.festival_post .posts {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: 33% 33% 33%;
+  margin-top: 100px;
+  height: auto;
 }
 
 /* ----- */
