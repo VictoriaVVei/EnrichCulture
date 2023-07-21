@@ -87,13 +87,18 @@ export function PostDetail() {
                         <div className='postDetail_title'><span title='Name'>{cname}</span> <span title='Type'>({type})</span></div>
 
                         <div className='postDetail_basicInfo'>
-                            <p>Date: <br />{formatDate()}</p>
-                            <p>Time Zone: <br />({location_test} time zone)</p>
+                            <p>Date: <br />
+                                {year.length === 0 && month.length === 0 && day.length === 0 ?
+                                    <>No Date Record
+                                    </> : <span>{formatDate()}</span>
+                                }
+                            </p>
                             <p>Culture Location: <br /><span title='Site'>{location}</span></p>
+                            <p>Current time Zone: {location_test}</p>
                         </div>
 
                         <div className='postDetail_intro'>
-                            <h1 style={{fontSize:"30px"}}>Introduction</h1>
+                            <h1 style={{ fontSize: "30px" }}>Introduction</h1>
                             <p title='Introduction'>{intro}</p>
                         </div>
                     </div>
