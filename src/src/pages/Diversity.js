@@ -94,7 +94,7 @@ export function Diversity() {
                             if (lastVisible) {
                                 setpostData_last(lastVisible)
                             } else {
-                                setPage_Num(Page_Num - 1)
+                                // setPage_Num(Page_Num - 1)
                             }
                         })
                 }

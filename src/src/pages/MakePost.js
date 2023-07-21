@@ -202,8 +202,8 @@ export function MakePost() {
             && day.trim().length > 0 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0
             || (checkdate === false && image.value.length !== 0 && cname.trim().length > 0
                 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0)) {
-            if (cname.match("%20") || cname.match("&")) {
-                text = document.createTextNode("String '&' and '%20' are not allowed");
+            if (cname.match("%20") || cname.match("&") || cname.match("/")) {
+                text = document.createTextNode("String '&','%20' and "/" are not allowed");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {

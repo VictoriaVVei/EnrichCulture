@@ -129,7 +129,7 @@ export function Festival() {
                             if (lastVisible) {
                                 setpostData_last(lastVisible)
                             } else {
-                                setPage_Num(Page_Num - 1)
+                                // setPage_Num(Page_Num - 1)
                             }
                         })
                 }
@@ -342,11 +342,11 @@ export function Festival() {
                     </div>
                     <div className='festival_post'>
                         <RenderCard postData={postData} />
-                        <div className='changePage atBottom' >
-                            <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
-                            <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
-                            <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
-                        </div>
+                    </div>
+                    <div className='changePage' >
+                        <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
+                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
+                        <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
                     </div>
                 </div>
             </div>
