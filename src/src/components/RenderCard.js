@@ -72,7 +72,15 @@ export function RenderCard(props) {
 
     return (
         <div className="posts">
-            {newEachCard}
+            {
+                props.postData.length !== 0 ?
+                    <>{newEachCard}
+                    </> :
+                    <div className='noPostAlert' style={{gridRow:"1 /span 3",gridColumn:"1 /span 3", fontSize:"40px"}}>
+                        Last Page
+                    </div>
+            }
+
         </div>
     );
 }

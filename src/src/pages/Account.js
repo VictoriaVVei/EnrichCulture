@@ -139,26 +139,32 @@ export function Account() {
                             if (lastVisible) {
                                 setpostData_last(lastVisible)
                             } else {
-                                setPage_Num(Page_Num - 1)
+                                // setPage_Num(Page_Num - 1)
                             }
                         })
                 }
             }
         } else {
-            let data_final = []
+            let promises = [];
             for (let i = 6 * Page_Num; i < (Fav.length < 6 * (Page_Num + 1) ? Fav.length : 6 * (Page_Num + 1)); i++) {
+                console.log(6 * (Page_Num))
                 console.log(6 * (Page_Num + 1))
-                console.log(Fav[i])
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.postID", "==", Fav[i])))
-                    .then((querySnapshot) => {
-                        const data = querySnapshot.docs.map((doc) => doc.data())
-                        data_final.push(data[0])
-                    })
+                // console.log(Fav[i])
+                // console.log(Fav.length )
+                promises.push(getDocs(query(collection(cloudStore, "postData"), where("Post_Information.postID", "==", Fav[i]))));
             }
-            setpostData2(data_final)
+
+            Promise.all(promises)
+                .then((snapshots) => {
+                    let data_final = snapshots.map(snapshot => snapshot.docs.map(doc => doc.data())[0]);
+                    setpostData2(data_final);
+                })
+                .catch((error) => {
+                    console.error("Error getting documents: ", error);
+                });
         }
     }, [click])
-
+    console.log(postData2)
     return (
         <div id="Account">
             <Nav />

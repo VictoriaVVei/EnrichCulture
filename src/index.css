@@ -605,9 +605,8 @@ input[type="file"] {
 }
 
 .uploadbutton {
-  width: 90px;
   display: inline-block;
-  padding: 12px 18px;
+  padding: 12px 31px;
   cursor: pointer;
   border-radius: 5px;
   background-color: #1B3A44;
@@ -1056,6 +1055,7 @@ input:checked+.slider:before {
 .festival_grid {
   display: grid;
   grid-template-columns: 30% 70%;
+  grid-template-columns: auto auto;
 }
 
 .festival_filter {
@@ -1086,17 +1086,19 @@ input:checked+.slider:before {
   border-radius: 7px;
   width: 80%;
   max-width: 200px;
-  margin: 40px auto;
+  margin: 10px auto;
   padding: 20px;
 }
 
 .festival_post {
   grid-column: 2;
   position: relative;
+  display: inline;
+  align-self: center;
 }
 
 .festival_filter_option {
-  margin: 10px;
+  margin: 7px;
 }
 
 .checkmark {
@@ -1111,8 +1113,15 @@ input:checked+.slider:before {
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-template-rows: 33% 33% 33%;
-  margin-top: 100px;
-  height: auto;
+  /* margin-top: 100px; */
+  /* height: auto; */
+  min-height: 680px;
+}
+
+.festival .changePage{
+  grid-column: 2;
+  grid-row: 2;
+  margin-left: -20px;
 }
 
 /* ----- */
