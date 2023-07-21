@@ -483,6 +483,7 @@ main {
   font-size: larger;
   font-weight: bolder;
   border-radius: 7px;
+  padding: 10px;
 
   background-color: rgb(128, 128, 128, 0.8);
   backdrop-filter: blur(1px);
@@ -1100,6 +1101,10 @@ input:checked+.slider:before {
 
 .checkmark {
   margin-right: 10px;
+}
+
+.festival_filter_option input{
+  cursor: pointer;
 }
 
 .festival_post .posts {
