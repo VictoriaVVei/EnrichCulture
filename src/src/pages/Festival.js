@@ -27,7 +27,6 @@ export function Festival() {
     const [click, setclick] = useState(1)
     const [sep_page, setsep_page] = useState([])
     const [postData, setpostData] = useState([])
-    const [postData2, setpostData2] = useState([])
     const [postData_last, setpostData_last] = useState(null)
 
     const last_page = () => {
@@ -50,7 +49,8 @@ export function Festival() {
     }
 
     useEffect(() => {
-        if (Month.length > 0 && location.length === 0 || (Month.length > 0 && location.length > 0)) {
+        if (Month.length > 0 && location.length === 0) {
+            console.log(1)
             if (Page_Num === 0) {
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.isFestival", "==", true), orderBy("Post_Information.month", "desc"), orderBy("Post_Information.day", "desc"), limit(9)))
                     .then((querySnapshot) => {
@@ -76,13 +76,8 @@ export function Festival() {
                         })
                 }
             }
-            if (location.length > 0) {
-                let data = postData.filter((item) => {
-                    return item.Post_Information.month == Month
-                })
-                setpostData(data)
-            }
         } else if (location.length > 0 && Month.length === 0) {
+            console.log(2)
             if (Page_Num === 0) {
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), limit(9)))
                     .then((querySnapshot) => {
@@ -95,6 +90,33 @@ export function Festival() {
             } else {
                 if (sep_page[Page_Num - 1]) {
                     getDocs(query(collection(cloudStore, "postData"), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), startAfter(sep_page[Page_Num - 1]), limit(9)))
+                        .then((querySnapshot) => {
+                            const data = querySnapshot.docs.map((doc) => doc.data())
+                            setpostData(data)
+
+                            const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+                            if (lastVisible) {
+                                setpostData_last(lastVisible)
+                            } else {
+                                setPage_Num(Page_Num - 1)
+                            }
+                        })
+                }
+            }
+        } else if (Month.length > 0 && location.length > 0) {
+            console.log(3)
+            if (Page_Num === 0) {
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), limit(9)))
+                    .then((querySnapshot) => {
+                        const data = querySnapshot.docs.map((doc) => doc.data())
+                        setpostData(data)
+
+                        const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
+                        setpostData_last(lastVisible)
+                    })
+            } else {
+                if (sep_page[Page_Num - 1]) {
+                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
                             setpostData(data)
@@ -135,8 +157,8 @@ export function Festival() {
                 }
             }
         }
-    }, [Month, click, location])
-
+    }, [Month, location])
+    console.log(postData)
     return (
         <div id="Festival">
             <Nav />
