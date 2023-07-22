@@ -186,7 +186,7 @@ export function OtherUserAccount() {
                     </div> */}
                     {loginUser && loginUser.length > 0 ?
                         <>
-                            {ifPrivate === false ?
+                            {ifPrivate === "Public" ?
                                 <>
                                     {postData.length !== 0 ?
                                         <><RenderCard postData={postData} />

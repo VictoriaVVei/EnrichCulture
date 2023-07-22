@@ -48,7 +48,7 @@ export function ReviseAccount() {
             setlocation2(location)
             setifPrivate2(ifPrivate)
         }
-    }, [location.length > 0])
+    }, [location.length > 0, ifPrivate.length > 0])
 
     const handleInputChange = (e) => {
         let { id, value } = e.target
@@ -298,11 +298,12 @@ export function ReviseAccount() {
                             <option value="US">US</option>
                         </select>
 
-                        <label htmlFor="privacy">Privacy: </label>
+                        <label htmlFor="privacy">Private: </label>
                         <select id="privacy" onChange={(e) => handleInputChange(e)}>
-                            <option value={ifPrivate2}>{ifPrivate2 === true ? "Private" : "Public"}</option>
-                            <option value={false}>Public</option>
-                            <option value={true}>Private</option>
+                            <option value={ifPrivate2}>{ifPrivate2}
+                            </option>
+                            <option value={"Public"}>Public</option>
+                            <option value={"Private"}>Private</option>
                         </select>
 
                         <label htmlFor="notification">Notification: </label>

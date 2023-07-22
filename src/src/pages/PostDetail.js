@@ -84,17 +84,19 @@ export function PostDetail() {
                         />
                     </div>
                     <div className='postDetail_grid'>
-                        <div className='postDetail_title'><span title='Name'>{cname}</span> <span title='Type'>({type})</span></div>
+                        <div className='postDetail_title'><span title='Name'>{cname}</span></div>
 
                         <div className='postDetail_basicInfo'>
                             <p>Date: <br />
                                 {year.length === 0 && month.length === 0 && day.length === 0 ?
-                                    <>No Date Record
-                                    </> : <span>{formatDate()}</span>
+                                    <>- No Date Record
+                                    </> : <span>- {formatDate()}</span>
                                 }
+                                <br />
+                                - In {location_test} time Zone
                             </p>
-                            <p>Culture Location: <br /><span title='Site'>{location}</span></p>
-                            <p>Current time Zone: {location_test}</p>
+                            <p>Location: {location}</p>
+                            <p>Type: {type}</p>
                         </div>
 
                         <div className='postDetail_intro'>
