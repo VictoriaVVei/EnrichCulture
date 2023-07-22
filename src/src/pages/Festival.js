@@ -36,22 +36,27 @@ export function Festival() {
         }
     }
 
+    const [isLoading, setIsLoading] = useState(true);
     const next_page = () => {
+        if (!isLoading) {
+            return;
+        }
+
         if (postData.length < 9) {
             return;
         }
 
         if (postData_last) {
-            setclick(click + 1)
             setPage_Num(Page_Num + 1)
+            setclick(click + 1)
             setsep_page(prev => [...prev, postData_last])
         }
     }
 
     useEffect(() => {
         if (Month.length > 0 && location.length === 0) {
-            console.log(1)
             if (Page_Num === 0) {
+                setIsLoading(false);
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.isFestival", "==", true), orderBy("Post_Information.month", "desc"), orderBy("Post_Information.day", "desc"), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
@@ -59,9 +64,11 @@ export function Festival() {
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
                         setpostData_last(lastVisible)
+                        setIsLoading(true);
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
+                    setIsLoading(false);
                     getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.isFestival", "==", true), orderBy("Post_Information.month", "desc"), orderBy("Post_Information.day", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
@@ -71,14 +78,15 @@ export function Festival() {
                             if (lastVisible) {
                                 setpostData_last(lastVisible)
                             } else {
-                                setPage_Num(Page_Num - 1)
+                                // setPage_Num(Page_Num - 1)
                             }
+                            setIsLoading(true);
                         })
                 }
             }
         } else if (location.length > 0 && Month.length === 0) {
-            console.log(2)
             if (Page_Num === 0) {
+                setIsLoading(false);
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
@@ -86,9 +94,11 @@ export function Festival() {
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
                         setpostData_last(lastVisible)
+                        setIsLoading(true);
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
+                    setIsLoading(false);
                     getDocs(query(collection(cloudStore, "postData"), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
@@ -98,14 +108,15 @@ export function Festival() {
                             if (lastVisible) {
                                 setpostData_last(lastVisible)
                             } else {
-                                setPage_Num(Page_Num - 1)
+                                // setPage_Num(Page_Num - 1)
                             }
+                            setIsLoading(true);
                         })
                 }
             }
         } else if (Month.length > 0 && location.length > 0) {
-            console.log(3)
             if (Page_Num === 0) {
+                setIsLoading(false);
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
@@ -113,9 +124,11 @@ export function Festival() {
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
                         setpostData_last(lastVisible)
+                        setIsLoading(true);
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
+                    setIsLoading(false);
                     getDocs(query(collection(cloudStore, "postData"), where("Post_Information.month", "==", Month), where("Post_Information.location", "==", location), where("Post_Information.isFestival", "==", true), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
@@ -125,13 +138,15 @@ export function Festival() {
                             if (lastVisible) {
                                 setpostData_last(lastVisible)
                             } else {
-                                setPage_Num(Page_Num - 1)
+                                // setPage_Num(Page_Num - 1)
                             }
+                            setIsLoading(true);
                         })
                 }
             }
         } else {
             if (Page_Num === 0) {
+                setIsLoading(false);
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.cname", "!=", null), where("Post_Information.isFestival", "==", true), orderBy("Post_Information.cname", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
@@ -139,9 +154,11 @@ export function Festival() {
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
                         setpostData_last(lastVisible)
+                        setIsLoading(true);
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
+                    setIsLoading(false);
                     getDocs(query(collection(cloudStore, "postData"), where("Post_Information.cname", "!=", null), where("Post_Information.isFestival", "==", true), orderBy("Post_Information.cname", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
@@ -153,12 +170,13 @@ export function Festival() {
                             } else {
                                 // setPage_Num(Page_Num - 1)
                             }
+                            setIsLoading(true);
                         })
                 }
             }
         }
-    }, [Month, location])
-    console.log(postData)
+    }, [Month, location, click])
+
     return (
         <div id="Festival">
             <Nav />

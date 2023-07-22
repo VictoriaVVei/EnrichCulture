@@ -96,23 +96,28 @@ export function Account() {
         }
     }
 
+    const [isLoading, setIsLoading] = useState(true);
     const next_page = () => {
         if (currentLocation === "Posts") {
+            if (!isLoading) {
+                return;
+            }
+
             if (postData.length < 6) {
                 return;
             }
 
             if (postData_last) {
-                setclick(click + 1)
                 setPage_Num(Page_Num + 1)
+                setclick(click + 1)
                 setsep_page(prev => [...prev, postData_last])
             }
         } else {
             if (postData2.length < 6) {
                 return;
             } else {
-                setclick(click + 1)
                 setPage_Num(Page_Num + 1)
+                setclick(click + 1)
             }
         }
     }
@@ -120,6 +125,7 @@ export function Account() {
     useEffect(() => {
         if (currentLocation === "Posts") {
             if (Page_Num === 0) {
+                setIsLoading(false);
                 getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), limit(6)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
@@ -127,9 +133,11 @@ export function Account() {
 
                         const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1]
                         setpostData_last(lastVisible)
+                        setIsLoading(true);
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
+                    setIsLoading(false);
                     getDocs(query(collection(cloudStore, "postData"), where("Post_Information.author", "==", loginUser), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(6)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
@@ -141,6 +149,7 @@ export function Account() {
                             } else {
                                 // setPage_Num(Page_Num - 1)
                             }
+                            setIsLoading(true);
                         })
                 }
             }
@@ -164,7 +173,7 @@ export function Account() {
                 });
         }
     }, [click])
-    console.log(postData2)
+
     return (
         <div id="Account">
             <Nav />
