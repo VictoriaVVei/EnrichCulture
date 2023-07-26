@@ -76,8 +76,8 @@ export function RenderCard(props) {
                 props.postData.length !== 0 ?
                     <>{newEachCard}
                     </> :
-                    <div className='noPostAlert' style={{gridRow:"1 /span 3",gridColumn:"1 /span 3", fontSize:"40px"}}>
-                        Last Page
+                    <div className='noPostAlert' style={{ gridRow: "1 /span 3", gridColumn: "1 /span 3", fontSize: "40px" }}>
+                        No Post Here
                     </div>
             }
 
