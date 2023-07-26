@@ -74,7 +74,6 @@ export function PostDetail() {
         <div id="PostDetail">
             <Nav />
             <div className='back' onClick={goBack}>&lt; back</div>
-            <div className='forBg1'></div>
             <div className='postDetail'>
                 <div className='postDetail_container'>
                     <div className='postDetail_img'>
@@ -116,7 +115,6 @@ export function PostDetail() {
                     </div>
                 </div>
             </div>
-            <div className='forBg2'></div>
         </div>
     );
 }

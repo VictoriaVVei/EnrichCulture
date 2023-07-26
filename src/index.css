@@ -118,8 +118,6 @@ main {
   /* Each page needs this css*/
   /* Ensure no white space at upper*/
   margin: 0;
-  display: grid;
-  grid-template-columns: 20% 60% 20%;
 }
 
 /* -Components Setting- */
@@ -802,8 +800,6 @@ input:checked+.slider:before {
 #PostDetail {
   /* Ensure no white space at upper*/
   margin: 0;
-  display: grid;
-  grid-template-columns: 20% 60% 20%;
 }
 
 /* -Components Setting- */
@@ -946,8 +942,6 @@ input:checked+.slider:before {
 #Diversity {
   /* Ensure no white space at upper*/
   margin: 0;
-  display: grid;
-  grid-template-columns: 20% 60% 20%;
   position: relative;
 }
 
@@ -992,10 +986,10 @@ input:checked+.slider:before {
   margin: 0;
 }
 
-.whatSearch_type p span {
+.whatSearch_type p > span {
+  position: relative;
   font-size: 20px;
   font-weight: normal;
-  cursor: pointer;
   background-color: white;
   padding: 5px 10px;
   border-radius: 7px;
@@ -1004,11 +998,12 @@ input:checked+.slider:before {
 
 .atBottom {
   animation: doNotshowFirst 2s forwards;
+  margin-right: 70px;
   margin-bottom: 20px;
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(calc(-50% - 20px));
 }
 
 .diversity .posts {
