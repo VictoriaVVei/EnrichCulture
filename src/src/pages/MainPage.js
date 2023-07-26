@@ -211,7 +211,6 @@ export function MainPage() {
     return (
         <div id="MainPage">
             <Nav />
-            <div className='forBg1'></div>
             <div className='mainPage'>
                 <div className='welcomeBoard'><h1>Reimagine <br />Culture</h1></div>
                 <div className='search'>
@@ -251,7 +250,6 @@ export function MainPage() {
                     </ul>
                 </div>
             </div>
-            <div className='forBg2'></div>
         </div>
     );
 }

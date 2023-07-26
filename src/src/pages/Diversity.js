@@ -105,11 +105,17 @@ export function Diversity() {
     return (
         <div id="Diversity">
             <Nav />
-            <div className='forBg1'></div>
             <div className='diversity'>
                 <div className='welcomeBoard'><h1>Diversity</h1></div>
                 <div className='whatSearch_type'>
-                    <p onClick={close} title="Search in Main Page">What type is being seach: <span title="Click to delete">{whatSearch}</span></p>
+                    <p title="Search in Main Page">What type is being search:
+                        <span title="Click to delete">{whatSearch}
+                            {whatSearch === null || whatSearch === undefined || whatSearch.length > 0 ?
+                                <><span className='material-symbols-outlined' style={{position: 'relative', top: '6px', cursor: 'pointer'}} onClick={close}>close</span>
+                                </> : null
+                            }
+                        </span>
+                    </p>
                 </div>
                 <RenderCard postData={postData} />
                 <div className='changePage atBottom' >
@@ -118,7 +124,6 @@ export function Diversity() {
                     <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
                 </div>
             </div>
-            <div className='forBg2'></div>
         </div>
     );
 }
