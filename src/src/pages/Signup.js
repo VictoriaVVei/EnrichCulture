@@ -3,6 +3,7 @@ import { auth, cloudStore } from '../../firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { Nav } from '../components/Nav';
+import { useNavigate } from 'react-router-dom';
 
 export function Signup() {
     const [fname, setfname] = useState("")
@@ -43,6 +44,7 @@ export function Signup() {
         }, 2000);
     }
 
+    const navigate = useNavigate();
     const signup = async (e) => {
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
@@ -82,7 +84,6 @@ export function Signup() {
                 }, 2000);
             } else {
                 let userID = getRandomInt(1000, 9999) + "&" + lname + "&" + fname + "&" + email.replace('@', "%40");
-                createUserWithEmailAndPassword(auth, email, password);
                 const docData = {
                     "Personal_Information": {
                         fname: fname,
@@ -103,21 +104,18 @@ export function Signup() {
 
                 e.target.style.display = "none"
 
-                setDoc(doc(cloudStore, "userData", userID), docData)
-                    .then(() => {
-                        setTimeout(() => {
-                            window.location.href = "/signin"
-                        }, 100);
-                    })
-                    .catch((error) => {
-                        console.error("Error setting document:", error);
-                    });
                 text = document.createTextNode("Thanks! Waitting for Processing");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
+
+                await setDoc(doc(cloudStore, "userChatData", userID), {})
+                await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(cloudStore, "userData", userID), docData)
+                console.log(1)
+                navigate("/signin")
             }
         } else {
             text = document.createTextNode("You should fill out all the empty blanks");

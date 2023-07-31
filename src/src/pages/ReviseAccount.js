@@ -123,6 +123,13 @@ export function ReviseAccount() {
         tips.innerHTML = '';
         let text = "";
 
+        text = document.createTextNode("Wait for Processing. Do not Reflesh the page!");
+        tips.appendChild(text)
+        tips.className = "show";
+        setTimeout(() => {
+            tips.className = tips.className.replace("show", "disappear");
+        }, 2000);
+
         if (pic.length !== 0 && fname.trim().length > 0 && lname.trim().length > 0 && bio.trim().length > 0
             && location.trim().length > 0) {
             if (image.value.length === 0) {
@@ -174,14 +181,6 @@ export function ReviseAccount() {
                     })
                 })
             }
-
-            text = document.createTextNode("Wait for Processing. Do not Reflesh the page!");
-            tips.appendChild(text)
-            tips.className = "show";
-            setTimeout(() => {
-                tips.className = tips.className.replace("show", "disappear");
-            }, 2000);
-
         } else {
             text = document.createTextNode("You should fill out all the empty blanks");
             tips.appendChild(text)
