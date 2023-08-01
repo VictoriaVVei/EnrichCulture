@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'; //import React Compo
 import { Nav } from '../components/Nav';
 import { RenderCard } from '../components/RenderCard';
 import { cloudStore } from '../../firebase';
-import { collection, query, where, getDocs, orderBy, limit, startAfter, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, limit, startAfter, updateDoc, doc, arrayUnion, arrayRemove, setDoc, serverTimestamp, getDoc, onSnapshot, Timestamp } from 'firebase/firestore';
 import { useParams } from 'react-router';
+import { v4 as uuid } from "uuid"
 
 export function OtherUserAccount() {
     let loginUser = localStorage.getItem("loginUser")
@@ -25,6 +26,15 @@ export function OtherUserAccount() {
             })
     }, [click2]);
 
+    const [userData2, setuserData2] = useState([])
+    useEffect(() => {
+        getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", loginUser)))
+            .then((querySnapshot) => {
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                setuserData2(data)
+            })
+    }, []);
+
     const [img, setimg] = useState("")
     const [name, setname] = useState("")
     const [bio, setbio] = useState("")
@@ -34,6 +44,16 @@ export function OtherUserAccount() {
     const [following_num, setfollowing] = useState("")
     const [email, setemail] = useState("")
     const [ifPrivate, setifPrivate] = useState("")
+
+    const [img2, setimg2] = useState("")
+    const [name2, setname2] = useState("")
+
+    useEffect(() => {
+        if (userData2.length > 0) {
+            setimg2(userData2[0].Personal_Information.img.length > 0 ? userData2[0].Personal_Information.img : "https://firebasestorage.googleapis.com/v0/b/enrichculture-4cc43.appspot.com/o/Default%2Ftest.png?alt=media&token=5ef4adc4-ab00-4715-b5ff-8aaa0b4dbdef")
+            setname2(userData2[0].Personal_Information.fname + " " + userData2[0].Personal_Information.lname)
+        }
+    }, [userData2])
 
     useEffect(() => {
         if (userData.length > 0) {
@@ -106,10 +126,8 @@ export function OtherUserAccount() {
     useEffect(() => {
         if (userData.length > 0) {
             if (userData[0].Followers.includes(loginUser)) {
-                console.log(1)
                 setifFollow(true)
             } else {
-                console.log(2)
                 setifFollow(false)
             }
         }
@@ -143,6 +161,167 @@ export function OtherUserAccount() {
         }
     }
 
+    const [isDragging, setIsDragging] = useState(false)
+    const [mousedownPositionX, setX] = useState(0)
+    const [mousedownPositionY, setY] = useState(0)
+    const [boxPositionX, setBoxPositionX] = useState(0);
+    const [boxPositionY, setBoxPositionY] = useState(0);
+
+    const mouseDown = (e) => {
+        e.preventDefault();
+        setIsDragging(true)
+        setX(e.nativeEvent.clientX);
+        setY(e.nativeEvent.clientY);
+
+        let div2 = document.querySelector(".contact")
+        setBoxPositionX(parseInt(window.getComputedStyle(div2).getPropertyValue("left").split("px")[0]))
+        setBoxPositionY(parseInt(window.getComputedStyle(div2).getPropertyValue("top").split("px")[0]))
+    }
+
+    const mouseMove = (e) => {
+        e.preventDefault();
+        if (isDragging === true) {
+            let div2 = document.querySelector(".contact")
+            let distanceX = e.clientX - mousedownPositionX;
+            let distanceY = e.clientY - mousedownPositionY;
+            div2.style.left = (boxPositionX + distanceX) + "px";
+            div2.style.top = (boxPositionY + distanceY) + "px";
+        }
+    }
+    const mouseUp = () => {
+        setIsDragging(false)
+    }
+
+    // 解决刷新太慢
+    useEffect(() => {
+        document.addEventListener('mousemove', mouseMove);
+        document.addEventListener('mouseup', mouseUp);
+
+        return () => {
+            document.removeEventListener('mousemove', mouseMove);
+            document.removeEventListener('mouseup', mouseUp);
+        };
+    }, [isDragging])
+
+    // chat
+    let chatID = loginUser.length > userID.length ? loginUser.split("&")[0] + loginUser.split("&")[1] + loginUser.split("&")[2] + "&" + userID.split("&")[0] + userID.split("&")[1] + userID.split("&")[2] : userID.split("&")[0] + userID.split("&")[1] + userID.split("&")[2] + "&" + loginUser.split("&")[0] + loginUser.split("&")[1] + loginUser.split("&")[2]
+
+    const [ifChat, setifChat] = useState(false)
+    const chatBox = async () => {
+        if (ifChat) {
+            setifChat(false)
+        } else {
+            setifChat(true)
+        }
+
+        const checkChat = await getDoc(doc(cloudStore, "chatData", chatID));
+
+        if (!checkChat.exists()) {
+            await setDoc(doc(cloudStore, "chatData", chatID), { messages: [] })
+
+            await updateDoc(doc(cloudStore, "userChatData", loginUser), {
+                [chatID + ".userInfo"]: {
+                    id: userID,
+                    displayName: name,
+                    photoURL: img
+                },
+                [chatID + ".date"]: serverTimestamp()
+            })
+
+            await updateDoc(doc(cloudStore, "userChatData", userID), {
+                [chatID + ".userInfo"]: {
+                    id: loginUser,
+                    displayName: name2,
+                    photoURL: img2
+                },
+                [chatID + ".date"]: serverTimestamp()
+            })
+        }
+    }
+
+    const [messages, setmessages] = useState([])
+    useEffect(() => {
+        const unSub = onSnapshot(doc(cloudStore, "chatData", chatID), (doc) => {
+            if (doc.exists()) {
+                setmessages(doc.data().messages)
+            }
+        });
+
+        return () => {
+            unSub()
+        }
+    }, [ifChat])
+
+    let messages_ref = null
+    if (messages.length > 0) {
+        let messages_array = messages.map((item) => {
+            return (
+                <div className={`message ${item.senderID === loginUser ? "owner" : "otherUser"}`} key={item.id}>
+                    {item.senderID === loginUser ?
+                        <>
+                            <div className='ownerChat'>
+                                <div className='chatInfo' style={{ marginRight: "15px" }}>
+                                    <p>{item.chat}</p>
+                                </div>
+                                <img
+                                    alt='ava'
+                                    src={item.senderID === loginUser ? img2 : img} />
+                            </div>
+                        </> :
+                        <div className='ownerChat'>
+                            <img
+                                alt='ava'
+                                src={item.senderID === loginUser ? img2 : img}
+                                style={{ marginRight: "15px" }} />
+                            <div className='chatInfo'>
+                                <p>{item.chat}</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            )
+        })
+        messages_ref = messages_array
+    }
+
+    useEffect(() => {
+        let div = document.querySelector(".contact")
+        if (ifChat) {
+            div.style.visibility = "visible"
+            div.style.opacity = "1"
+        } else {
+            div.style.visibility = "hidden"
+            div.style.opacity = "0"
+        }
+    }, [ifChat])
+
+    const [chat, setchat] = useState("")
+    const handleInputChange = (e) => {
+        let { value } = e.target
+        setchat(value)
+    }
+
+    const submit = async () => {
+        await updateDoc(doc(cloudStore, "chatData", chatID), {
+            messages: arrayUnion(
+                {
+                    id: uuid(),
+                    chat,
+                    senderID: loginUser,
+                    Date: Timestamp.now()
+                }
+            )
+        })
+        setchat("")
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            submit();
+        }
+    };
+
     return (
         <div id="Account">
             <Nav />
@@ -157,14 +336,40 @@ export function OtherUserAccount() {
                         <p>{bio}</p>
                         <p>{location}</p>
                         <div className={`edit ${!ifFollow ? 'otherEdit' : 'otherEdit2'}`} onClick={follow}>{ifFollow ? 'Unfollow' : 'Follow'}</div>
-                        <div className='make'>Contact</div>
+                        {
+                            loginUser !== null ?
+                                <><div className='make' onClick={chatBox}>Contact</div>
+                                </> : null
+                        }
                         <div className='make' title={email} style={{ cursor: "auto" }}>E-mail</div>
                     </div>
 
+                    <div className='contact'>
+                        <div className='moving2' onMouseDown={(e) => { mouseDown(e) }}><span className='material-symbols-outlined contact_close' onClick={chatBox}>close</span></div>
+                        <div className='contact_content'>
+                            <div className='contactBox'>
+                                {messages_ref}
+                            </div>
+                            <form>
+                                <label htmlFor="chat"></label>
+                                <textarea
+                                    type="text"
+                                    id="chat"
+                                    name="chat"
+                                    onChange={(e) => handleInputChange(e)}
+                                    value={chat}
+                                    onKeyDown={(e) => handleKeyDown(e)}
+                                />
+                            </form>
+                        </div>
+                    </div>
+
                     <div className='info_website'>
-                        <p><span style={{ fontWeight: "bolder" }}>{post_num}</span> posts</p>
-                        <p><span style={{ fontWeight: "bolder" }}>{followers_num}</span> followers</p>
-                        <p><span style={{ fontWeight: "bolder" }}>{following_num}</span> following</p>
+                        <div>
+                            <p><span style={{ fontWeight: "bolder" }}>{post_num}</span> posts</p>
+                            <p><span style={{ fontWeight: "bolder" }}>{followers_num}</span> followers</p>
+                            <p><span style={{ fontWeight: "bolder" }}>{following_num}</span> following</p>
+                        </div>
                     </div>
                 </div>
                 <div className='post'>

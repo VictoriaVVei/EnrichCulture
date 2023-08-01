@@ -1,7 +1,7 @@
 import React, { useState } from 'react'; //import React Component
 import { auth, cloudStore } from '../../firebase';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, setDoc, doc } from 'firebase/firestore';
 import { Nav } from '../components/Nav';
 
 export function Signin() {
@@ -78,6 +78,9 @@ export function Signin() {
                         }, 2000);
 
                         signInWithEmailAndPassword(auth, email, password)
+                            .catch((error) => {
+                                console.error("Error: ", error);
+                            });
                         localStorage.setItem("loginUser", userID)
 
                         setTimeout(() => {
