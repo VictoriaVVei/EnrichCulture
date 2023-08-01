@@ -561,7 +561,6 @@ main {
 }
 
 .moving {
-  position: fixed;
   height: 40px;
   width: 200px;
   border-radius: 7px 7px 0 0;
@@ -573,7 +572,6 @@ main {
 }
 
 .follow_name_container {
-  margin-top: 30px;
   height: calc(100% - 30px);
   overflow-y: auto;
 }
