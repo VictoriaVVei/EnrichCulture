@@ -19,9 +19,10 @@ export function MainPage() {
     const [location_recon_dom, setlocation_dom] = useState(null);
     useEffect(() => {
         let dom = null
-        if (location_recon.length > 0) {
+        if (location_recon.length > 10) {  // should be modified later
             let type = []
             location_recon.map((item) => {
+                // console.log(item);
                 if (type.filter((item2) => item2.toLowerCase().trim() == item.Post_Information.type.toLowerCase().trim()).length === 0) {
                     type.push(item.Post_Information.type)
                 }
@@ -41,10 +42,35 @@ export function MainPage() {
         } else {
             dom = (() => {
                 return (
-                    <li className=''>
-                        There is no culture record from your choosen country.
-                        Please Log in, Revise country or just make a new post.
-                    </li>
+                    // <li className=''>
+                    //     There is no culture record from your choosen country.
+                    //     Please Log in, Revise country or just make a new post.
+                    // </li>
+                    <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', width: '100%', gap: '3%'}}>
+                        <div style={{flex: '25%'}}>
+                            <a href='/diversity'>
+                                <img src='./img/explore_diversity1.jpg' style={{width:'100%', height: '100%', borderRadius: '10%'}} />
+                            </a>
+                        </div>
+                        <div style={{flex: '25%'}}>
+                            <a href='/diversity'>
+                                <img src='./img/explore_diversity2.jpg' style={{width:'100%', height: '50%', borderRadius: '10%'}} />
+                                <img src='./img/explore_diversity3.jpg' style={{width:'100%', height: '50%', borderRadius: '10%'}} />
+                            </a>
+                        </div>
+                        <div style={{flex: '25%'}}>
+                            <a href='/diversity'>
+                                <img src='./img/explore_diversity4.jpg' style={{width:'100%', height: '50%', borderRadius: '10%'}} />
+                                <img src='./img/explore_diversity5.jpg' style={{width:'49%', marginRight: '2%', height: '50%',  borderRadius: '10%'}} />
+                                <img src='./img/explore_diversity6.jpg' style={{width:'49%', height: '50%', borderRadius: '10%'}} />
+                            </a>
+                        </div>
+                        <div style={{flex: '25%'}}>
+                            <a href='/diversity'>
+                                <img src='./img/explore_diversity7.jpg' style={{width:'100%', height: '100%', borderRadius: '10%'}} />
+                            </a>
+                        </div>
+                    </div>
                 );
             });
         }
