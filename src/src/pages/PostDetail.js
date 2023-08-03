@@ -54,11 +54,19 @@ export function PostDetail() {
         }
     }, [postData])
 
+    let loginUser = localStorage.getItem("loginUser")
     const navigate = useNavigate();
     const seeAuthor = (e) => {
         let value = e.target.dataset.value
-        const newUrl = `/otherUserAccount/${value}`;
-        navigate(newUrl);
+
+        if (loginUser !== null) {
+            const newUrl = `/otherUserAccount/${value}`;
+            navigate(newUrl);
+        } else {
+            const newUrl = `/signin`;
+            navigate(newUrl);
+        }
+
     }
 
     const formatDate = () => {
