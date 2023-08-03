@@ -28,11 +28,13 @@ export function OtherUserAccount() {
 
     const [userData2, setuserData2] = useState([])
     useEffect(() => {
-        getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", loginUser)))
-            .then((querySnapshot) => {
-                const data = querySnapshot.docs.map((doc) => doc.data());
-                setuserData2(data)
-            })
+        if (loginUser !== null) {
+            getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.userID", "==", loginUser)))
+                .then((querySnapshot) => {
+                    const data = querySnapshot.docs.map((doc) => doc.data());
+                    setuserData2(data)
+                })
+        }
     }, []);
 
     const [img, setimg] = useState("")
@@ -204,7 +206,10 @@ export function OtherUserAccount() {
     }, [isDragging])
 
     // chat
-    let chatID = loginUser.length > userID.length ? loginUser.split("&")[0] + loginUser.split("&")[1] + loginUser.split("&")[2] + "&" + userID.split("&")[0] + userID.split("&")[1] + userID.split("&")[2] : userID.split("&")[0] + userID.split("&")[1] + userID.split("&")[2] + "&" + loginUser.split("&")[0] + loginUser.split("&")[1] + loginUser.split("&")[2]
+    let chatID = ""
+    if (loginUser !== null) {
+        chatID = loginUser.length > userID.length ? loginUser.split("&")[0] + loginUser.split("&")[1] + loginUser.split("&")[2] + "&" + userID.split("&")[0] + userID.split("&")[1] + userID.split("&")[2] : userID.split("&")[0] + userID.split("&")[1] + userID.split("&")[2] + "&" + loginUser.split("&")[0] + loginUser.split("&")[1] + loginUser.split("&")[2]
+    }
 
     const [ifChat, setifChat] = useState(false)
     const chatBox = async () => {
@@ -214,42 +219,47 @@ export function OtherUserAccount() {
             setifChat(true)
         }
 
-        const checkChat = await getDoc(doc(cloudStore, "chatData", chatID));
+        if (loginUser !== null) {
+            const checkChat = await getDoc(doc(cloudStore, "chatData", chatID));
 
-        if (!checkChat.exists()) {
-            await setDoc(doc(cloudStore, "chatData", chatID), { messages: [] })
+            if (!checkChat.exists()) {
+                await setDoc(doc(cloudStore, "chatData", chatID), { messages: [] })
 
-            await updateDoc(doc(cloudStore, "userChatData", loginUser), {
-                [chatID + ".userInfo"]: {
-                    id: userID,
-                    displayName: name,
-                    photoURL: img
-                },
-                [chatID + ".date"]: serverTimestamp()
-            })
+                await updateDoc(doc(cloudStore, "userChatData", loginUser), {
+                    [chatID + ".userInfo"]: {
+                        id: userID,
+                        displayName: name,
+                        photoURL: img
+                    },
+                    [chatID + ".date"]: serverTimestamp()
+                })
 
-            await updateDoc(doc(cloudStore, "userChatData", userID), {
-                [chatID + ".userInfo"]: {
-                    id: loginUser,
-                    displayName: name2,
-                    photoURL: img2
-                },
-                [chatID + ".date"]: serverTimestamp()
-            })
+                await updateDoc(doc(cloudStore, "userChatData", userID), {
+                    [chatID + ".userInfo"]: {
+                        id: loginUser,
+                        displayName: name2,
+                        photoURL: img2
+                    },
+                    [chatID + ".date"]: serverTimestamp()
+                })
+            }
         }
     }
 
     const [messages, setmessages] = useState([])
     useEffect(() => {
-        const unSub = onSnapshot(doc(cloudStore, "chatData", chatID), (doc) => {
-            if (doc.exists()) {
-                setmessages(doc.data().messages)
-            }
-        });
+        if (loginUser !== null) {
+            const unSub = onSnapshot(doc(cloudStore, "chatData", chatID), (doc) => {
+                if (doc.exists()) {
+                    setmessages(doc.data().messages)
+                }
+            });
 
-        return () => {
-            unSub()
+            return () => {
+                unSub()
+            }
         }
+
     }, [ifChat])
 
     let messages_ref = null
@@ -335,7 +345,11 @@ export function OtherUserAccount() {
                         <h3>{name}</h3>
                         <p>{bio}</p>
                         <p>{location}</p>
-                        <div className={`edit ${!ifFollow ? 'otherEdit' : 'otherEdit2'}`} onClick={follow}>{ifFollow ? 'Unfollow' : 'Follow'}</div>
+                        {
+                            loginUser !== null ?
+                                <><div className={`edit ${!ifFollow ? 'otherEdit' : 'otherEdit2'}`} onClick={follow}>{ifFollow ? 'Unfollow' : 'Follow'}</div>
+                                </> : null
+                        }
                         {
                             loginUser !== null ?
                                 <><div className='make' onClick={chatBox}>Contact</div>

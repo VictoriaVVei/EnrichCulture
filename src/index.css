@@ -148,7 +148,8 @@ main {
 
 .mainPage h1,
 .diversity h1,
-.festival h1 {
+.festival h1,
+.Qa h1 {
   font-size: 80px;
   display: inline;
   justify-content: center;
@@ -1139,6 +1140,7 @@ input:checked+.slider:before {
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-template-rows: 33% 33% 33%;
+  min-height: 680px;
 }
 
 /* -------- */
@@ -1253,6 +1255,42 @@ input:checked+.slider:before {
   grid-row: 2;
   margin: auto;
 }
+
+/* -- */
+/* Qa */
+/*--- */
+#Qa {
+  /* Each page needs this css*/
+  /* Ensure no white space at upper*/
+  margin: 0;
+}
+
+/* -Components Setting- */
+.Qa {
+  /* Each page needs this css*/
+  animation: slideUp 1s ease;
+  margin: 0px 0px 50px 0px;
+  background-image: linear-gradient(transparent, antiquewhite, transparent);
+}
+
+.Qa .welcomeBoard {
+  background-image: url("../public/img/qa.png"), linear-gradient(transparent, antiquewhite, transparent);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 45vh;
+  width: 100%;
+  /* max-width: 800px; */
+  margin: auto;
+  height: 45vh;
+  border-radius: 20px;
+  animation: doNotshowFirst 2s forwards;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(255, 255, 255);
+}
+
 
 /* ----- */
 /* Hover */

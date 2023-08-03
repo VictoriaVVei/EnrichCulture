@@ -31,13 +31,19 @@ export function Nav() {
             })
             currentPage[2].classList.add("dashed_decoration");
         }
+        if (currentLocation === "qa") {
+            currentPage.forEach((content) => {
+                content.classList.remove("dashed_decoration");
+            })
+            currentPage[3].classList.add("dashed_decoration");
+        }
         if (currentLocation === "signup" || currentLocation === "signin" ||
             currentLocation === "account" || currentLocation === "reviseAccount" ||
             currentLocation === "makePost") {
             currentPage.forEach((content) => {
                 content.classList.remove("dashed_decoration");
             })
-            currentPage[3].classList.add("dashed_decoration");
+            currentPage[4].classList.add("dashed_decoration");
         }
     })
 
@@ -48,6 +54,7 @@ export function Nav() {
                     <NavLink to="/main" onClick={topFunction}><li className='logoName'>Enrich<br /> Culture</li></NavLink>
                     <NavLink to="/diversity" onClick={topFunction}><li>Diversity</li></NavLink>
                     <NavLink to="/festival" onClick={topFunction}><li>Festival</li></NavLink>
+                    <NavLink to="/qa" onClick={topFunction}><li>Q&A</li></NavLink>
                     {loginUser !== null ? (
                         <NavLink to="/account">
                             <li className="profile_avatar material-symbols-outlined" onClick={topFunction}>
