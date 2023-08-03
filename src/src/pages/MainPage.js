@@ -216,7 +216,7 @@ export function MainPage() {
                 <div className='welcomeBoard'><h1>Reimagine <br />Culture</h1></div>
                 <div className='explore_div'>
                     <h2 style={{ marginBottom: "40px" }}>Explore Diversity</h2> {/*flex和%的配合容易出问题，grid是制作框架的首选*/}
-                    <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "25% 25%  12.5% 12.5% 25% ", gap: "10px" }}>
+                    <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "25% 25%  12.5% 12.5% 25% ", gap: "5px" }}>
                         <div
                             data-value={"Fresco"} //首字母一定大写
                             onClick={(e) => searchType(e)}
@@ -229,7 +229,7 @@ export function MainPage() {
                                 justifyContent: "center",
                                 alignItems: "center",
                                 color: "white",
-                                fontSize: "30px",
+                                fontSize: "15px",
                                 cursor: "pointer"
                             }}>
                             Fresco
@@ -246,10 +246,96 @@ export function MainPage() {
                                 justifyContent: "center",
                                 alignItems: "center",
                                 color: "white",
-                                fontSize: "25px",
+                                fontSize: "15px",
                                 cursor: "pointer"
                             }}>
                             Clothing
+                        </div>
+                        <div
+                            data-value={"Chinese painting"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity3.jpg)",
+                                gridRow: "2",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "15px",
+                                cursor: "pointer"
+                            }}>
+                            Chinese painting
+                        </div>
+                        <div
+                            data-value={"Oil painting"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity4.jpg)",
+                                gridRow: "1",
+                                gridColumn: "1/ span 2",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "15px",
+                                cursor: "pointer"
+                            }}>
+                            Oil painting
+                        </div>
+                        <div
+                            data-value={"Sculpture"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity5.jpg)",
+                                gridRow: "2",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "15px",
+                                cursor: "pointer"
+                            }}>
+                            Sculpture
+                        </div>
+                        <div
+                            data-value={"Ceramics"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity6.jpg)",
+                                gridRow: "2",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "15px",
+                                cursor: "pointer"
+                            }}>
+                            Ceramics
+                        </div>
+                        <div
+                            data-value={"Westernoilpainting"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity7.jpg)",
+                                gridRow: "1 /span 2",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "15px",
+                                cursor: "pointer"
+                            }}>
+                            Western oil painting
                         </div>
                         {/* <img src='./img/explore_diversity3.jpg' style={{ }} />
                         <img src='./img/explore_diversity4.jpg' style={{ }} />
