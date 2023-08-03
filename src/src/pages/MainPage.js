@@ -42,35 +42,10 @@ export function MainPage() {
         } else {
             dom = (() => {
                 return (
-                    // <li className=''>
-                    //     There is no culture record from your choosen country.
-                    //     Please Log in, Revise country or just make a new post.
-                    // </li>
-                    <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', width: '100%', gap: '3%'}}>
-                        <div style={{flex: '25%'}}>
-                            <a href='/diversity'>
-                                <img src='./img/explore_diversity1.jpg' style={{width:'100%', height: '100%', borderRadius: '10%'}} />
-                            </a>
-                        </div>
-                        <div style={{flex: '25%'}}>
-                            <a href='/diversity'>
-                                <img src='./img/explore_diversity2.jpg' style={{width:'100%', height: '50%', borderRadius: '10%'}} />
-                                <img src='./img/explore_diversity3.jpg' style={{width:'100%', height: '50%', borderRadius: '10%'}} />
-                            </a>
-                        </div>
-                        <div style={{flex: '25%'}}>
-                            <a href='/diversity'>
-                                <img src='./img/explore_diversity4.jpg' style={{width:'100%', height: '50%', borderRadius: '10%'}} />
-                                <img src='./img/explore_diversity5.jpg' style={{width:'49%', marginRight: '2%', height: '50%',  borderRadius: '10%'}} />
-                                <img src='./img/explore_diversity6.jpg' style={{width:'49%', height: '50%', borderRadius: '10%'}} />
-                            </a>
-                        </div>
-                        <div style={{flex: '25%'}}>
-                            <a href='/diversity'>
-                                <img src='./img/explore_diversity7.jpg' style={{width:'100%', height: '100%', borderRadius: '10%'}} />
-                            </a>
-                        </div>
-                    </div>
+                    <li className=''>
+                        There is no culture record from your choosen country.
+                        Please Log in, Revise country or just make a new post.
+                    </li>
                 );
             });
         }
@@ -270,9 +245,47 @@ export function MainPage() {
                     </form>
                 </div>
                 <div className='explore_div'>
-                    <h2 style={{ marginBottom: "40px" }}>Explore Diversity</h2>
-                    <ul className='location_recon'>
-                        {location_recon_dom}
+                    <h2 style={{ marginBottom: "40px" }}>Explore Diversity</h2> {/*flex和%的配合容易出问题，grid是制作框架的首选*/}
+                    <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "25% 25%  12.5% 12.5% 25% ", gap: "10px" }}>
+                        <div
+                            data-value={"Fresco"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity1.jpg)",
+                                gridRow: "1 /span 2",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "30px",
+                                cursor:"pointer"
+                            }}>
+                            Fresco
+                        </div>
+                        <div
+                            data-value={"Clothing"} //首字母一定大写
+                            onClick={(e) => searchType(e)}
+                            style={{
+                                backgroundImage: "url(./img/explore_diversity2.jpg)",
+                                gridRow: "1",
+                                borderRadius: "10px",
+                                backgroundSize: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                fontSize: "25px",
+                                cursor:"pointer"
+                            }}>
+                            Clothing
+                        </div>
+                        {/* <img src='./img/explore_diversity3.jpg' style={{ }} />
+                        <img src='./img/explore_diversity4.jpg' style={{ }} />
+                        <img src='./img/explore_diversity5.jpg' style={{ }} />
+                        <img src='./img/explore_diversity6.jpg' style={{ }} />
+                        <img src='./img/explore_diversity7.jpg' style={{ }} /> */}
                     </ul>
                 </div>
             </div>
