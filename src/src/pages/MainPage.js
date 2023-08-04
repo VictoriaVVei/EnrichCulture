@@ -216,7 +216,7 @@ export function MainPage() {
                 <div className='welcomeBoard'><h1>Reimagine <br />Culture</h1></div>
                 <div className='explore_div'>
                     <h2 style={{ marginBottom: "40px" }}> Explore Diversity <br /> A World Of Cultures At Your Fingertips</h2> {/*flex和%的配合容易出问题，grid是制作框架的首选*/}
-                    <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "25% 25%  12.5% 12.5% 25% ", gap: "5px" }}>
+                    <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "auto auto auto auto auto", gap: "5px", width: "100%", margin:"auto" }}>
                         <div
                             data-value={"Fresco"} //首字母一定大写
                             onClick={(e) => searchType(e)}
