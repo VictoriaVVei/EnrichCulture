@@ -321,7 +321,7 @@ export function MainPage() {
                             Ceramics
                         </div>
                         <div
-                            data-value={"Western oil painting"} //首字母一定大写
+                            data-value={"Westernoilpainting"} //首字母一定大写
                             onClick={(e) => searchType(e)}
                             style={{
                                 backgroundImage: "url(./img/explore_diversity7.jpg)",
