@@ -41,6 +41,22 @@ export function PostDetail() {
     const [type, settype] = useState("")
 
     useEffect(() => {
+        let currentPage = document.querySelectorAll(".Nav1 ul a li")
+        if (type !== "Festival") {
+            currentPage.forEach((content) => {
+                content.classList.remove("dashed_decoration");
+            })
+            currentPage[1].classList.add("dashed_decoration");
+        }
+        if (type === "Festival") {
+            currentPage.forEach((content) => {
+                content.classList.remove("dashed_decoration");
+            })
+            currentPage[2].classList.add("dashed_decoration");
+        }
+    })
+
+    useEffect(() => {
         if (postData.length > 0) {
             setimg(postData[0].Post_Information.pic)
             setday(postData[0].Post_Information.day)

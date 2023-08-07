@@ -256,7 +256,8 @@ export function Account() {
     let follow_array_ref = null
 
     if (follow_array.length > 0) {
-        follow_array_ref = follow_array.map((item) => {
+        var uniqueArray = [...new Set(follow_array)];
+        follow_array_ref = uniqueArray.map((item) => {
             return (
                 <li key={item.Personal_Information.userID} className="follow_name_content">
                     <NavLink to={`/otherUserAccount/${item.Personal_Information.userID}`}>{item.Personal_Information.fname + " " + item.Personal_Information.lname}</NavLink>
