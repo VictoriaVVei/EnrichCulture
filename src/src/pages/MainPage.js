@@ -52,29 +52,29 @@ export function MainPage() {
         setlocation_dom(dom)
     }, [location_recon]);
 
-    // const [typeList, settypeList] = useState([]);
-    // useEffect(() => {
-    //     getDocs(query(collection(cloudStore, "typeData"), where("typeData", "!=", null), limit(4)))
-    //         .then((querySnapshot) => {
-    //             const data = querySnapshot.docs.map((doc) => doc.data());
-    //             settypeList(data)
-    //         })
-    // }, []);
+    const [typeList, settypeList] = useState([]);
+    useEffect(() => {
+        getDocs(query(collection(cloudStore, "typeData"), where("typeData", "!=", null)))
+            .then((querySnapshot) => {
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                settypeList(data)
+            })
+    }, []);
 
-    // const [typeList_dom, settypeList_dom] = useState(null);
-    // useEffect(() => {
-    //     let dom = null
-    //     if (typeList.length > 0) {
-    //         dom = typeList[0].typeData.map((content) => {
-    //             return (
-    //                 <li className='' key={content} data-value={content} onClick={(e) => searchType(e)}>
-    //                     {content}
-    //                 </li>
-    //             );
-    //         });
-    //     }
-    //     settypeList_dom(dom)
-    // }, [typeList]);
+    const [typeList_dom, settypeList_dom] = useState(null);
+    useEffect(() => {
+        let dom = null
+        if (typeList.length > 0) {
+            dom = typeList[0].typeData.filter((item)=>{return item !== "Festival"}).sort((a, b) => a[0].localeCompare(b[0])).slice(0,5).map((content) => {
+                return (
+                    <li className='' key={content} data-value={content} onClick={(e) => searchType(e)}>
+                        {content}
+                    </li>
+                );
+            });
+        }
+        settypeList_dom(dom)
+    }, [typeList]);
 
     const topFunction = () => {
         document.body.scrollTop = 0; // For Safari
@@ -215,7 +215,8 @@ export function MainPage() {
             <div className='mainPage'>
                 <div className='welcomeBoard'><h1>Reimagine <br />Culture</h1></div>
                 <div className='explore_div'>
-                    <h2 style={{ marginBottom: "40px" }}> Explore Diversity <br /> A World Of Cultures At Your Fingertips</h2> {/*flex和%的配合容易出问题，grid是制作框架的首选*/}
+                    <h2 style={{ marginBottom: "40px" }}>Explore Diversity: A world of culture at your fingertips</h2> {/*flex和%的配合容易出问题，grid是制作框架的首选*/}
+
                     <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "auto auto auto auto auto", gap: "5px", width: "100%", margin:"auto" }}>
                         <div
                             data-value={"Fresco"} //首字母一定大写
@@ -366,10 +367,11 @@ export function MainPage() {
                         <div className='search_type' style={{ marginTop: "40px" }}>
                             <p>Popular types: </p>
                             <ul className='typeList'>
-                                <li onClick={(e) => searchType(e)} data-value="Architecture">Architecture </li>
+                                {typeList_dom}
+                                {/* <li onClick={(e) => searchType(e)} data-value="Architecture">Architecture </li>
                                 <li onClick={(e) => searchType(e)} data-value="Art">Art </li>
                                 <li onClick={(e) => searchType(e)} data-value="Literature">Literature </li>
-                                <li onClick={(e) => searchType(e)} data-value="Music">Music</li>
+                                <li onClick={(e) => searchType(e)} data-value="Music">Music</li> */}
                             </ul>
                         </div>
                     </form>

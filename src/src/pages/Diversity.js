@@ -45,11 +45,11 @@ export function Diversity() {
             setsep_page(prev => [...prev, postData_last])
         }
     }
-
+console.log(whatSearch.trim())
     useEffect(() => {
         if (whatSearch && whatSearch.length > 0) {
             if (Page_Num === 0) {
-                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.format", "==", whatSearch.toLowerCase().trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
+                getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "==", whatSearch.trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), limit(9)))
                     .then((querySnapshot) => {
                         const data = querySnapshot.docs.map((doc) => doc.data())
                         setpostData(data)
@@ -59,7 +59,7 @@ export function Diversity() {
                     })
             } else {
                 if (sep_page[Page_Num - 1]) {
-                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.format", "==", whatSearch.toLowerCase().trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
+                    getDocs(query(collection(cloudStore, "postData"), where("Post_Information.type", "==", whatSearch.trim()), orderBy("Post_Information.type", "desc"), orderBy("Post_Information.date", "desc"), startAfter(sep_page[Page_Num - 1]), limit(9)))
                         .then((querySnapshot) => {
                             const data = querySnapshot.docs.map((doc) => doc.data())
                             setpostData(data)
@@ -105,23 +105,25 @@ export function Diversity() {
     return (
         <div id="Diversity">
             <Nav />
-            <div className='diversity'>
-                <div className='welcomeBoard'><h1>Diversity</h1></div>
-                <div className='whatSearch_type'>
-                    <p title="Search in Main Page">What type is being search:
-                        <span title="Click to delete">{whatSearch}
-                            {whatSearch === null || whatSearch === undefined || whatSearch.length > 0 ?
-                                <><span className='material-symbols-outlined' style={{position: 'relative', top: '6px', cursor: 'pointer'}} onClick={close}>close</span>
-                                </> : null
-                            }
-                        </span>
-                    </p>
-                </div>
-                <RenderCard postData={postData} />
-                <div className='changePage atBottom' >
-                    <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
-                    <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
-                    <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
+            <div>
+                <div className='diversity'>
+                    <div className='welcomeBoard'><h1>Diversity</h1></div>
+                    <div className='whatSearch_type'>
+                        <p title="Search in Main Page">What type is being search:
+                            <span title="Click to delete">{whatSearch}
+                                {whatSearch === null || whatSearch === undefined || whatSearch.length > 0 ?
+                                    <><span className='material-symbols-outlined' style={{ position: 'relative', top: '6px', cursor: 'pointer' }} onClick={close}>close</span>
+                                    </> : null
+                                }
+                            </span>
+                        </p>
+                    </div>
+                    <RenderCard postData={postData} />
+                    <div className='changePage atBottom' >
+                        <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
+                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
+                        <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
+                    </div>
                 </div>
             </div>
         </div>
