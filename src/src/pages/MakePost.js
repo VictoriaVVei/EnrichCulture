@@ -102,14 +102,15 @@ export function MakePost() {
             setlocation(value)
         }
         if (id === "type") {
-            settype(value.trim())
+            settype(value)
             settype2("")
+            setcheckdate(true)
         }
         if (id === "intro") {
             setintro(value)
         }
         if (id === "otherCate") {
-            let value2 = value.toLowerCase();
+            let value2 = value;
             setformat(value2)
             settype2(value)
             settype("")
@@ -193,9 +194,9 @@ export function MakePost() {
 
         let check_type = ""
         if (type.trim().length > 0) {
-            check_type = type
+            check_type = type.charAt(0).toUpperCase() + type.slice(1).toLowerCase().trim()
         } else {
-            check_type = type2
+            check_type = type2.charAt(0).toUpperCase() + type2.slice(1).toLowerCase().trim()
         }
 
         if (image.value.length !== 0 && cname.trim().length > 0 && year.trim().length > 0 && month.trim().length > 0
@@ -203,7 +204,7 @@ export function MakePost() {
             || (checkdate === false && image.value.length !== 0 && cname.trim().length > 0
                 && location.trim().length > 0 && check_type.trim().length > 0 && intro.trim().length > 0)) {
             if (cname.match("%20") || cname.match("&") || cname.match("/")) {
-                text = document.createTextNode("String '&','%20' and "/" are not allowed");
+                text = document.createTextNode("String '&','%20' and " / " are not allowed");
                 tips.appendChild(text)
                 tips.className = "show";
                 setTimeout(() => {
@@ -261,8 +262,7 @@ export function MakePost() {
                                 date: new Date(),
                                 pic: downloadURL,
                                 author: loginUser,
-                                isFestival: checkFestival,
-                                format: format
+                                isFestival: checkFestival
                             }
                         }
 
@@ -350,7 +350,7 @@ export function MakePost() {
         window.history.back()
         topFunction()
     }
-
+console.log(checkdate)
     return (
         <div id="MakePost">
             <Nav />
@@ -387,10 +387,41 @@ export function MakePost() {
                     <hr
                         style={{ marginBottom: "30px" }}
                     />
+                    <label htmlFor="type">Type: </label>
+                    <select id="type" onChange={(e) => handleInputChange(e)} style={{ marginBottom: "20px" }}>
+                        <option value="Festival">Festival</option>
+                        <option value="">Other</option>
+                    </select>
+                    {type === "" ?
+                        <>
+                            <div className="accept_box">
+                                <label><input id="checkBox" onClick={check_date} className="accept_button" type="checkbox" />
+                                    Not sure the date?
+                                </label>
+                            </div>
+                            <div
+                                ref={other}>
+                                <label htmlFor="otherCate">Enter type:</label>
+                                <input
+                                    type="text"
+                                    id="otherCate"
+                                    name="otherCate"
+                                    placeholder="One type only"
+                                    onChange={(e) => handleInputChange(e)}
+                                    value={type2}
+                                />
+                            </div>
+                            <hr />
+                            <ol className='addDivs'>
+                                <p style={{ fontSize: "20px", fontWeight: "bolder" }}>What we have: (Click to choose)</p>
+                                {autoCompleteDivs}
+                            </ol>
+                        </> : null
+                    }
 
-                    <div className='date'>
-                        {checkdate === true ?
-                            <>
+                    {checkdate === true ?
+                        <>
+                            <div className='date'>
                                 <div className="accept_box">
                                     <label><input id="checkBox" onClick={check_year} className="accept_button" type="checkbox" />
                                         Have a Specific year?
@@ -435,49 +466,21 @@ export function MakePost() {
                                     value={day}
                                     style={{ outline: "auto", border: "auto", marginRight: "20px" }}
                                 />
-                            </> : null
-                        }
-                        <br />
-                        <label htmlFor="location">Location: </label>
-                        <select id="location" onChange={(e) => handleInputChange(e)} style={{ marginRight: "20px" }}>
-                            <option value="China">China</option>
-                            <option value="England">England</option>
-                            <option value="Japan">Japan</option>
-                            <option value="Korea">Korea</option>
-                            <option value="US">US</option>
-                        </select>
-                        <label htmlFor="type">Type: </label>
-                        <select id="type" onChange={(e) => handleInputChange(e)} style={{ marginBottom: "20px" }}>
-                            <option value="Festival">Festival</option>
-                            <option value="">Other</option>
-                        </select>
-                    </div>
-                    {type === "" ?
-                        <>
-                            <div className="accept_box">
-                                <label><input id="checkBox" onClick={check_date} className="accept_button" type="checkbox" />
-                                    Not sure the date?
-                                </label>
                             </div>
-                            <div
-                                ref={other}>
-                                <label htmlFor="otherCate">Enter type:</label>
-                                <input
-                                    type="text"
-                                    id="otherCate"
-                                    name="otherCate"
-                                    placeholder="One type only"
-                                    onChange={(e) => handleInputChange(e)}
-                                    value={type2}
-                                />
-                            </div>
-                            <hr />
-                            <ol className='addDivs'>
-                                <p style={{ fontSize: "20px", fontWeight: "bolder" }}>What we have: (Click to choose)</p>
-                                {autoCompleteDivs}
-                            </ol>
                         </> : null
                     }
+                    <br />
+
+
+                    <label htmlFor="location">Location: </label>
+                    <select id="location" onChange={(e) => handleInputChange(e)} style={{ marginRight: "20px", marginBottom: "20px" }}>
+                        <option value="China">China</option>
+                        <option value="England">England</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Korea">Korea</option>
+                        <option value="US">US</option>
+                    </select>
+
                     <br />
                     <label htmlFor="intro">Introduction: </label>
                     <textarea
