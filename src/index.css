@@ -318,6 +318,7 @@ main {
   margin-top: 20px;
   border: none;
   outline: none;
+  border-radius: 7px;
 }
 
 #snackbar {

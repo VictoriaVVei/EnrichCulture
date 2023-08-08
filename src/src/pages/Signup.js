@@ -49,12 +49,17 @@ export function Signup() {
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
         let text = "";
+        Array.from(document.getElementsByTagName("input")).forEach((item) => {
+            item.style.border = "none"
+        });
 
         if (fname.trim().length !== 0 && lname.trim().length !== 0 && email.trim().length !== 0 && password.trim().length !== 0) {
             const checkEmail = await getDocs(query(collection(cloudStore, "userData"), where("Personal_Information.email", "==", email))); //Check email exsit
             const checkEmail_array = checkEmail.docs.map(doc => doc.data()); //Change promise to array
 
             if (fname.match("%20") || fname.match("&") || lname.match("%20") || lname.match("&")) {
+                document.getElementsByTagName("input")[0].style.border = "1px solid red"
+                document.getElementsByTagName("input")[1].style.border = "1px solid red"
                 text = document.createTextNode("String '&' and '%20' are not allowed");
                 tips.appendChild(text)
                 tips.className = "show";
@@ -62,6 +67,7 @@ export function Signup() {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
             } else if (checkEmail_array.length !== 0) {
+                document.getElementsByTagName("input")[2].style.border = "1px solid red"
                 text = document.createTextNode("Email existed");
                 tips.appendChild(text)
                 tips.className = "show";
@@ -69,6 +75,7 @@ export function Signup() {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
             } else if (!validateEmail(email)) {
+                document.getElementsByTagName("input")[2].style.border = "1px solid red"
                 text = document.createTextNode("Invalid Email Address");
                 tips.appendChild(text)
                 tips.className = "show";
@@ -76,6 +83,7 @@ export function Signup() {
                     tips.className = tips.className.replace("show", "disappear");
                 }, 2000);
             } else if (password.length < 6) {
+                document.getElementsByTagName("input")[3].style.border = "1px solid red"
                 text = document.createTextNode("Enter at least 6 string for Password");
                 tips.appendChild(text)
                 tips.className = "show";
@@ -118,6 +126,11 @@ export function Signup() {
                 navigate("/signin")
             }
         } else {
+            document.getElementsByTagName("input")[0].style.border = "1px solid red"
+            document.getElementsByTagName("input")[1].style.border = "1px solid red"
+            document.getElementsByTagName("input")[2].style.border = "1px solid red"
+            document.getElementsByTagName("input")[3].style.border = "1px solid red"
+
             text = document.createTextNode("You should fill out all the empty blanks");
             tips.appendChild(text)
             tips.className = "show";
