@@ -216,6 +216,7 @@ export function MainPage() {
                 <div className='welcomeBoard'><h1>Reimagine <br />Culture</h1></div>
                 <div className='explore_div'>
                     <h2 style={{ marginBottom: "40px" }}>Explore Diversity: A world of culture at your fingertips</h2> {/*flex和%的配合容易出问题，grid是制作框架的首选*/}
+
                     <ul className='location_recon' style={{ display: "grid", gridTemplateRows: "100px 100px", gridTemplateColumns: "auto auto auto auto auto", gap: "5px", width: "100%", margin:"auto" }}>
                         <div
                             data-value={"Fresco"} //首字母一定大写
@@ -321,7 +322,7 @@ export function MainPage() {
                             Ceramics
                         </div>
                         <div
-                            data-value={"Western oil painting"} //首字母一定大写
+                            data-value={"Westernoilpainting"} //首字母一定大写
                             onClick={(e) => searchType(e)}
                             style={{
                                 backgroundImage: "url(./img/explore_diversity7.jpg)",
@@ -337,6 +338,11 @@ export function MainPage() {
                             }}>
                             Western oil painting
                         </div>
+                        {/* <img src='./img/explore_diversity3.jpg' style={{ }} />
+                        <img src='./img/explore_diversity4.jpg' style={{ }} />
+                        <img src='./img/explore_diversity5.jpg' style={{ }} />
+                        <img src='./img/explore_diversity6.jpg' style={{ }} />
+                        <img src='./img/explore_diversity7.jpg' style={{ }} /> */}
                     </ul>
                 </div>
                 <div className='search'>
