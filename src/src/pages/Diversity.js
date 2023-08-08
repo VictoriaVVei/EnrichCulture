@@ -45,7 +45,7 @@ export function Diversity() {
             setsep_page(prev => [...prev, postData_last])
         }
     }
-console.log(whatSearch.trim())
+
     useEffect(() => {
         if (whatSearch && whatSearch.length > 0) {
             if (Page_Num === 0) {
@@ -111,7 +111,7 @@ console.log(whatSearch.trim())
                     <div className='whatSearch_type'>
                         <p title="Search in Main Page">What type is being search:
                             <span title="Click to delete">{whatSearch}
-                                {whatSearch === null || whatSearch === undefined || whatSearch.length > 0 ?
+                                {whatSearch !== null && whatSearch.length > 0 ?
                                     <><span className='material-symbols-outlined' style={{ position: 'relative', top: '6px', cursor: 'pointer' }} onClick={close}>close</span>
                                     </> : null
                                 }
