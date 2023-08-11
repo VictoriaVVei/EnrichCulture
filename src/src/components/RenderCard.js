@@ -1,7 +1,7 @@
 import { cloudStore } from '../../firebase';
 import { collection, query, where, getDocs, orderBy, limit, startAfter, updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react'; //import React Component
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 export function RenderCard(props) {
     let loginUser = localStorage.getItem("loginUser")
@@ -27,6 +27,8 @@ export function RenderCard(props) {
         let { value } = e.target.dataset
         setclick(click + 1)
         if (userData.length === 0) {
+            let previousPage = window.location.href.split("/")[window.location.href.split("/").length - 1]
+            localStorage.setItem("previousPage", previousPage)
             window.location.href = "/signin"
         } else {
             if (!Fav.includes(value)) {

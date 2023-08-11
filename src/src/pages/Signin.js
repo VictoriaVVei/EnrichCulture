@@ -69,6 +69,7 @@ export function Signin() {
                             tips.className = tips.className.replace("show", "disappear");
                         }, 2000);
                     } else {
+
                         text = document.createTextNode("Successfully Log in");
                         tips.style.backgroundColor = "#54b37b"
                         tips.appendChild(text)
@@ -83,9 +84,17 @@ export function Signin() {
                             });
                         localStorage.setItem("loginUser", userID)
 
-                        setTimeout(() => {
-                            window.location.href = "/main"
-                        }, 1000);
+                        let previousPage = localStorage.getItem("previousPage");
+                        if (previousPage !== null) {
+                            setTimeout(() => {
+                                window.location.href = `/${previousPage}`
+                                localStorage.removeItem("previousPage")
+                            }, 1000);
+                        } else {
+                            setTimeout(() => {
+                                window.location.href = "/main"
+                            }, 1000);
+                        }
                     }
                 }
             }

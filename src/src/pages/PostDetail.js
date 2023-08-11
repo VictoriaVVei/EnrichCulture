@@ -79,6 +79,8 @@ export function PostDetail() {
             const newUrl = `/otherUserAccount/${value}`;
             navigate(newUrl);
         } else {
+            let previousPage = window.location.href.split("/")[window.location.href.split("/").length - 1]
+            localStorage.setItem("previousPage", "postDetail/" + previousPage)
             const newUrl = `/signin`;
             navigate(newUrl);
         }

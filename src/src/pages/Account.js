@@ -61,19 +61,21 @@ export function Account() {
     }
 
     useEffect(() => {
-        let currentPage = document.querySelectorAll(".post_button ul li")
+        if (loginUser !== null) {
+            let currentPage = document.querySelectorAll(".post_button ul li")
 
-        if (currentLocation === "Posts") {
-            currentPage.forEach((content) => {
-                content.classList.remove("dashed_decoration2");
-            })
-            currentPage[0].classList.add("dashed_decoration2");
-        }
-        if (currentLocation === "Fav") {
-            currentPage.forEach((content) => {
-                content.classList.remove("dashed_decoration2");
-            })
-            currentPage[1].classList.add("dashed_decoration2");
+            if (currentLocation === "Posts") {
+                currentPage.forEach((content) => {
+                    content.classList.remove("dashed_decoration2");
+                })
+                currentPage[0].classList.add("dashed_decoration2");
+            }
+            if (currentLocation === "Fav") {
+                currentPage.forEach((content) => {
+                    content.classList.remove("dashed_decoration2");
+                })
+                currentPage[1].classList.add("dashed_decoration2");
+            }
         }
     })
 
@@ -177,15 +179,18 @@ export function Account() {
 
     const [messages, setmessages] = useState([])
     useEffect(() => {
-        const unSub = onSnapshot(doc(cloudStore, "userChatData", loginUser), (doc) => {
-            if (doc.exists()) {
-                setmessages(doc.data())
-            }
-        });
+        if (loginUser !== null) {
+            const unSub = onSnapshot(doc(cloudStore, "userChatData", loginUser), (doc) => {
+                if (doc.exists()) {
+                    setmessages(doc.data())
+                }
+            });
 
-        return () => {
-            unSub()
+            return () => {
+                unSub()
+            }
         }
+
     }, [])
 
     const [ifOpen, setifOpen] = useState(false)
@@ -311,45 +316,47 @@ export function Account() {
     return (
         <div id="Account">
             <Nav />
-            <div className='profile_grid'>
-                <div className='info'>
-                    <div className='info_basic'>
-                        <img
-                            src={img}
-                            alt='ava.img'
-                        />
-                        <h3>{name}</h3>
-                        <p>{bio}</p>
-                        <p>{location}</p>
-                        <div className='edit'><NavLink to="/reviseAccount" onClick={topFunction}>Edit Your Profile</NavLink></div>
-                        <div className='make'><NavLink to="/makePost" onClick={topFunction}>Make a post</NavLink></div>
-                        <div className='make' onClick={(e) => openList(e)} data-value="message" title='Click to close and open'>Message</div>
-                        <div className='make' onClick={logout}>Log Out</div>
-                    </div>
+            {loginUser !== null ?
+                <>
+                    <div className='profile_grid'>
+                        <div className='info'>
+                            <div className='info_basic'>
+                                <img
+                                    src={img}
+                                    alt='ava.img'
+                                />
+                                <h3>{name}</h3>
+                                <p>{bio}</p>
+                                <p>{location}</p>
+                                <div className='edit'><NavLink to="/reviseAccount" onClick={topFunction}>Edit Your Profile</NavLink></div>
+                                <div className='make'><NavLink to="/makePost" onClick={topFunction}>Make a post</NavLink></div>
+                                <div className='make' onClick={(e) => openList(e)} data-value="message" title='Click to close and open'>Message</div>
+                                <div className='make' onClick={logout}>Log Out</div>
+                            </div>
 
-                    <div className='info_website'>
-                        <div className="follow_data">
-                            <p><span style={{ fontWeight: "bolder" }}>{post_num}</span> posts</p>
-                            <p className='fo_hover' onClick={(e) => openList(e)} data-value="followers" title='Click to close and open'><span data-value="followers" style={{ fontWeight: "bolder" }}>{followers_num}</span> followers</p>
-                            <p className='fo_hover' onClick={(e) => openList(e)} data-value="following" title='Click to close and open'><span data-value="following" style={{ fontWeight: "bolder" }}>{following_num}</span> following</p>
-                        </div>
+                            <div className='info_website'>
+                                <div className="follow_data">
+                                    <p><span style={{ fontWeight: "bolder" }}>{post_num}</span> posts</p>
+                                    <p className='fo_hover' onClick={(e) => openList(e)} data-value="followers" title='Click to close and open'><span data-value="followers" style={{ fontWeight: "bolder" }}>{followers_num}</span> followers</p>
+                                    <p className='fo_hover' onClick={(e) => openList(e)} data-value="following" title='Click to close and open'><span data-value="following" style={{ fontWeight: "bolder" }}>{following_num}</span> following</p>
+                                </div>
 
-                        <div className='follow_name'>
-                            <div className='moving' onMouseDown={(e) => { mouseDown(e) }}>{whatHover === "followers" ? "Followers" : whatHover === "following" ? "Following" : "Message"}</div>
-                            <div className='follow_name_container'>
-                                <ol>{follow_ref.current}</ol>
+                                <div className='follow_name'>
+                                    <div className='moving' onMouseDown={(e) => { mouseDown(e) }}>{whatHover === "followers" ? "Followers" : whatHover === "following" ? "Following" : "Message"}</div>
+                                    <div className='follow_name_container'>
+                                        <ol>{follow_ref.current}</ol>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className='post'>
-                    <div className='post_button'>
-                        <ul>
-                            <li data-value="Posts" onClick={(e) => switchPost(e)}>Posts</li>
-                            <li data-value="Fav" onClick={(e) => switchPost(e)}>Fav</li>
-                        </ul>
-                    </div>
-                    {/* <div className='posts'>
+                        <div className='post'>
+                            <div className='post_button'>
+                                <ul>
+                                    <li data-value="Posts" onClick={(e) => switchPost(e)}>Posts</li>
+                                    <li data-value="Fav" onClick={(e) => switchPost(e)}>Fav</li>
+                                </ul>
+                            </div>
+                            {/* <div className='posts'>
                         <div className='post_each'>
                             <NavLink to={"/post/" + "自由女神"}>
                                 <img
@@ -360,18 +367,23 @@ export function Account() {
                             </NavLink>
                         </div>
                     </div> */}
-                    {currentLocation === "Posts" ?
-                        <><RenderCard postData={postData} />
-                        </> : <RenderCard postData={postData2} />
-                    }
+                            {currentLocation === "Posts" ?
+                                <><RenderCard postData={postData} />
+                                </> : <RenderCard postData={postData2} />
+                            }
 
-                    <div className='changePage' >
-                        <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
-                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
-                        <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
-                    </div>
+                            <div className='changePage' >
+                                <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
+                                <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
+                                <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
+                            </div>
+                        </div>
+                    </div >
+                </> :
+                <div className='profile_grid' style={{ display: "flex", justifyContent: "center", alignItems: "center", fontSize: "80px" }}>
+                    <div style={{ fontSize: "40px" }}>You should log in first</div>
                 </div>
-            </div >
+            }
         </div >
     );
 }
