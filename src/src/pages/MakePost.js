@@ -187,6 +187,8 @@ export function MakePost() {
     }
 
     const submit = async (e) => {
+        topFunction();
+        
         const image = document.querySelector(".uploadImg");
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
@@ -283,6 +285,18 @@ export function MakePost() {
                             }
                         }
 
+                        if (check_type === "Festival") {
+                            const docData_num = {
+                                "numData_Festival": increment(1),
+                            }
+                            updateDoc(doc(cloudStore, "numData", "numData_Festival"), docData_num)
+                        } else {
+                            const docData_num = {
+                                "numData_Diversity": increment(1),
+                            }
+                            updateDoc(doc(cloudStore, "numData", "numData_Diversity"), docData_num)
+                        }
+
                         const nameData = await getDocs(query(collection(cloudStore, "nameData"), where("Added_Culture.Cultures", "!=", null)));
                         const nameData_array = nameData.docs.map(doc => doc.data()); //Change promise to array
                         if (nameData_array.length === 0) {
@@ -350,7 +364,7 @@ export function MakePost() {
         window.history.back()
         topFunction()
     }
-console.log(checkdate)
+    console.log(checkdate)
     return (
         <div id="MakePost">
             <Nav />
