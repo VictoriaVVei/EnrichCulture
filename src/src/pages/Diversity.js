@@ -11,15 +11,19 @@ export function Diversity() {
         setwhatSearch(whatSearch_type)
     }, [whatSearch])
 
-    const topFunction = () => {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    };
-
     const close = () => {
         localStorage.setItem("whatSearch_type", "")
         setwhatSearch("")
     }
+
+    const [totalPage_num, settotalPage_num] = useState([])
+    useEffect(() => {
+        getDocs(query(collection(cloudStore, "numData"), where("numData_Diversity", "!=", null)))
+            .then((querySnapshot) => {
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                settotalPage_num(Math.ceil(data[0].numData_Diversity / 9))
+            })
+    }, []);
 
     const [Page_Num, setPage_Num] = useState(0)
     const [click, setclick] = useState(1)
@@ -36,6 +40,14 @@ export function Diversity() {
 
     const next_page = () => {
         if (postData.length < 9) {
+            return;
+        }
+
+        if (postData.length < 9) {
+            return;
+        }
+
+        if (Page_Num + 1 === totalPage_num) {
             return;
         }
 
@@ -121,7 +133,7 @@ export function Diversity() {
                     <RenderCard postData={postData} />
                     <div className='changePage atBottom' >
                         <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
-                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
+                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}/ {totalPage_num > 0 ? totalPage_num: 0}</div>
                         <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
                     </div>
                 </div>

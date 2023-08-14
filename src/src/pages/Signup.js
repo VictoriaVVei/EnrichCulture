@@ -44,8 +44,14 @@ export function Signup() {
         }, 2000);
     }
 
+    const topFunction = () => {
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    };
+
     const navigate = useNavigate();
     const signup = async (e) => {
+        topFunction();
         let tips = document.getElementById("snackbar");
         tips.innerHTML = '';
         let text = "";

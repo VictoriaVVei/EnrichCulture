@@ -23,6 +23,15 @@ export function Festival() {
         setlocation(value)
     }
 
+    const [totalPage_num, settotalPage_num] = useState([])
+    useEffect(() => {
+        getDocs(query(collection(cloudStore, "numData"), where("numData_Festival", "!=", null)))
+            .then((querySnapshot) => {
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                settotalPage_num(Math.ceil(data[0].numData_Festival / 9))
+            })
+    }, []);
+
     const [Page_Num, setPage_Num] = useState(0)
     const [click, setclick] = useState(1)
     const [sep_page, setsep_page] = useState([])
@@ -43,6 +52,10 @@ export function Festival() {
         }
 
         if (postData.length < 9) {
+            return;
+        }
+
+        if (Page_Num + 1 === totalPage_num) {
             return;
         }
 
@@ -385,7 +398,7 @@ export function Festival() {
                     </div>
                     <div className='changePage' >
                         <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
-                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
+                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}/ {totalPage_num > 0 ? totalPage_num: 0}</div>
                         <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
                     </div>
                 </div>

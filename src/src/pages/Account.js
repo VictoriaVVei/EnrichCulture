@@ -112,6 +112,13 @@ export function Account() {
                 return;
             }
 
+            console.log(Page_Num + 1)
+            console.log(Math.ceil(post_num / 6))
+
+            if (Page_Num + 1 === Math.ceil(post_num / 6)) {
+                return;
+            }
+
             if (postData_last) {
                 setPage_Num(Page_Num + 1)
                 setclick(click + 1)
@@ -119,6 +126,8 @@ export function Account() {
             }
         } else {
             if (postData2.length < 6) {
+                return;
+            } else if (Page_Num + 1 === Math.ceil(Fav.length / 6)) {
                 return;
             } else {
                 setPage_Num(Page_Num + 1)
@@ -374,7 +383,12 @@ export function Account() {
 
                             <div className='changePage' >
                                 <div className='switchPage' onClick={last_page}>&lt; Last Page</div>
-                                <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}</div>
+                                {currentLocation === "Posts" ?
+                                    <>
+                                        <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}/ {post_num > 0 ? Math.ceil(post_num / 6) : 0}</div>
+                                    </> :
+                                    <div className='switchPage' style={{ animation: "none" }}>{Page_Num + 1}/ {Fav.length > 0 ? Math.ceil(Fav.length / 6) : 0}</div>
+                                }
                                 <div className='switchPage' onClick={next_page}>Next Page &gt;</div>
                             </div>
                         </div>

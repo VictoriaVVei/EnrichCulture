@@ -57,9 +57,14 @@ export function RenderCard(props) {
                 colorClass = "like"
             }
 
+            const topFunction = () => {
+                document.body.scrollTop = 0; // For Safari
+                document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            };
+
             return (
                 <div className='post_each' key={postID}>
-                    <NavLink to={`/postDetail/${postID}`} >
+                    <NavLink to={`/postDetail/${postID}`} onClick={topFunction}>
                         <img
                             src={pic}
                             alt='post.img'
