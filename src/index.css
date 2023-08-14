@@ -318,6 +318,7 @@ main {
   margin-top: 20px;
   border: none;
   outline: none;
+  border-radius: 7px;
 }
 
 #snackbar {
@@ -344,6 +345,18 @@ main {
 #snackbar.disappear {
   visibility: hidden;
   animation: fadeout 0.5s;
+}
+
+.for_password {
+  position: relative;
+}
+
+.for_password span {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }
 
 /* ------- */
@@ -569,7 +582,7 @@ main {
 }
 
 .follow_name_container {
-  height: calc(100% - 30px);
+  height: calc(100% - 40px);
   overflow-y: auto;
 }
 
