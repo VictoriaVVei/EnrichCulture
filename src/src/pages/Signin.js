@@ -108,6 +108,11 @@ export function Signin() {
         }
     }
 
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    }
+
     return (
         <div id="Signup">
             <Nav />
@@ -135,16 +140,21 @@ export function Signin() {
                                 value={email}
                             />
                             <hr />
-                            <label htmlFor="password">Password: </label>
-                            <input
-                                type="text"
-                                id="password"
-                                name="password"
-                                // placeholder="Password"
-                                onChange={(e) => handleInputChange(e)}
-                                value={password}
-                            />
-                            <hr />
+                            <div className='for_password'>
+                                <label htmlFor="password">Password: </label>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    name="password"
+                                    // placeholder="Password"
+                                    onChange={(e) => handleInputChange(e)}
+                                    value={password}
+                                />
+                                <span onClick={togglePasswordVisibility} className="material-symbols-outlined">
+                                    {showPassword ? 'visibility' : 'visibility_off'}
+                                </span>
+                                <hr />
+                            </div>
 
                             <div className='decorate_signin' onClick={signin}>Sign in</div>
                             <div>
