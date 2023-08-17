@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Nav } from '../components/Nav';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { cloudStore } from '../../firebase';
+import { Footer } from '../components/Footer';
 
 export function MainPage() {
     let location = localStorage.getItem("location") !== null ? localStorage.getItem("location") : "China"
@@ -371,6 +372,7 @@ export function MainPage() {
                     </form>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }

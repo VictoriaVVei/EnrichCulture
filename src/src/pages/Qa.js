@@ -1,5 +1,6 @@
 import React from 'react'; //import React Component
 import { Nav } from '../components/Nav';
+import { Footer } from '../components/Footer';
 
 export function Qa() {
 
@@ -15,6 +16,7 @@ export function Qa() {
                     </p>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }
