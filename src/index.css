@@ -118,6 +118,10 @@ main {
   /* Each page needs this css*/
   /* Ensure no white space at upper*/
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
 }
 
 /* -Components Setting- */
@@ -1081,7 +1085,9 @@ input:checked+.slider:before {
 #Diversity {
   /* Ensure no white space at upper*/
   margin: 0;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* -Components Setting- */
@@ -1155,6 +1161,9 @@ input:checked+.slider:before {
   /* Each page needs this css*/
   /* Ensure no white space at upper*/
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* -Components Setting- */
@@ -1268,6 +1277,9 @@ input:checked+.slider:before {
   /* Each page needs this css*/
   /* Ensure no white space at upper*/
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* -Components Setting- */
