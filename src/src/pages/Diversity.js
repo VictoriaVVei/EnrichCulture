@@ -3,6 +3,7 @@ import { Nav } from '../components/Nav';
 import { RenderCard } from '../components/RenderCard';
 import { collection, query, where, getDocs, orderBy, limit, startAfter } from 'firebase/firestore';
 import { cloudStore } from '../../firebase';
+import { Footer } from '../components/Footer';
 
 export function Diversity() {
     let whatSearch_type = localStorage.getItem("whatSearch_type")
@@ -138,6 +139,7 @@ export function Diversity() {
                     </div>
                 </div>
             </div>
+            <Footer></Footer>
         </div>
     );
 }
