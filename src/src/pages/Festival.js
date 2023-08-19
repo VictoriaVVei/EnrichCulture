@@ -395,6 +395,7 @@ export function Festival() {
                         </div>
                     </div>
                     <div className='festival_post'>
+                        <h2 style={{marginLeft: '22.5%'}}>Discover Your Festival Passion – Dive Deep to Explore!</h2>
                         <RenderCard postData={postData} />
                     </div>
                     <div className='changePage' >
